@@ -1,0 +1,18 @@
+# Automate conversion of @nunit.framework.dll@ to @nunit.framework.jar@:
+@"c:\Program Files\Mainsoft for Java EE 2.5\bin\Converter.exe" nunit.framework.dll /out:nunit.framework.jar "/lib:C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727;W:\open source\libraries\softwareninjas\nunit"@
+# Automate C# -> MainSoft project compilation/conversion (ideally using only bytecode conversion, if possible), testing generated output (JAR) with:
+@"c:\Program Files\Java\jdk1.6.0\bin\javac.exe" -cp CoreJava.jar;nunit.framework.jar;mscorlib.jar;. Test.java@
+and
+@"c:\Program Files\Java\jdk1.6.0\bin\java.exe" -cp CoreJava.jar;nunit.framework.jar;mscorlib.jar;. Test@
+with the following source code:<pre><code>import SoftwareNinjas.Core.Test.EnumerableExtensions;
+public class Test
+{
+	public static void main(String[] args)
+	{
+		EnumerableExtensions ee = new EnumerableExtensions ( );
+		ee.Compose_Prefix();
+	}
+}</code></pre>
+# Convert or create a Java NUnit test runner (try @NUnit.Console@ first)
+# Investigate merging all JARs together
+# Update build script to compile to Java and run unit tests after the C# unit tests
