@@ -9,19 +9,6 @@ namespace System
     public delegate void Action();
 
     /// <summary>
-    /// Encapsulates a method that takes a single parameter and does not return a value.
-    /// </summary>
-    /// 
-    /// <typeparam name="T">
-    /// The type of the parameter of the method that this delegate encapsulates.
-    /// </typeparam>
-    /// 
-    /// <param name="obj">
-    /// The parameter of the method that this delegate encapsulates.
-    /// </param>
-    public delegate void Action<T>(T obj);
-
-    /// <summary>
     /// Encapsulates a method that has two parameters and does not return a value.
     /// </summary>
     /// 
