@@ -65,7 +65,7 @@ namespace SoftwareNinjas.Core.Test
         /// <param name="actual">
         /// The actual elements.
         /// </param>
-        private static void EnumerateSame<T>(IEnumerable<T> expected, IEnumerable<T> actual)
+        public static void EnumerateSame<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
             var eEnum = expected.GetEnumerator();
             var aEnum = actual.GetEnumerator();
