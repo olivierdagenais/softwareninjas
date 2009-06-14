@@ -3,7 +3,11 @@ using System.Collections.Generic;
 
 namespace SoftwareNinjas.Core.Process
 {
-    internal class CapturedProcessFactory : ICapturedProcessFactory
+    /// <summary>
+    /// An implementation of <see cref="ICapturedProcessFactory"/> that creates instances of
+    /// <see cref="CapturedProcess"/>.
+    /// </summary>
+    public class CapturedProcessFactory : ICapturedProcessFactory
     {
         #region ICapturedProcessFactory Members
 

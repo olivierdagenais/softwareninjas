@@ -18,8 +18,7 @@ namespace SoftwareNinjas.Core.Process.Test
         /// </summary>
         /// 
         /// <param name="instance">
-        /// A single instance of <see cref="SimulatedCapturedProcess"/> that will be configured with the standard
-        /// handlers on each call to
+        /// A single instance of <see cref="SimulatedCapturedProcess"/> that will be configured on each call to
         /// <see cref="ICapturedProcessFactory.Create(string, IEnumerable{object}, Action{string}, Action{string})"/>.
         /// </param>
         public SimulatedCapturedProcessFactory(SimulatedCapturedProcess instance)
@@ -32,6 +31,8 @@ namespace SoftwareNinjas.Core.Process.Test
         ICapturedProcess ICapturedProcessFactory.Create(string pathToExecutable, 
             IEnumerable<object> arguments, Action<string> standardOutHandler, Action<string> standardErrorHandler)
         {
+            _instance.PathToExecutable = pathToExecutable;
+            _instance.Arguments = arguments;
             _instance.StandardOutHandler = standardOutHandler;
             _instance.StandardErrorHandler = standardErrorHandler;
             return _instance;
