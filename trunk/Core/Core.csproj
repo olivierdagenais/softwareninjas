@@ -45,6 +45,13 @@
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Pair.cs" />
+    <Compile Include="Process\CapturedProcess.cs" />
+    <Compile Include="Process\CapturedProcessFactory.cs" />
+    <Compile Include="Process\ICapturedProcess.cs" />
+    <Compile Include="Process\ICapturedProcessFactory.cs" />
+    <Compile Include="Process\Test\CapturedProcess.cs" />
+    <Compile Include="Process\Test\SimulatedCapturedProcess.cs" />
+    <Compile Include="Process\Test\SimulatedCapturedProcessFactory.cs" />
     <Compile Include="System\Delegates.cs" />
     <Compile Include="System\Runtime\CompilerServices\ExtensionAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
