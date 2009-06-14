@@ -96,6 +96,52 @@ namespace SoftwareNinjas.Core.Process.Test
             set;
         }
 
+        private IEnumerable<object> _arguments = null;
+        /// <summary>
+        /// The command-line parameters that will be processed into a single string to be provided to the program, if
+        /// applicable.
+        /// </summary>
+        public IEnumerable<object> Arguments
+        {
+            get
+            {
+                return _arguments;
+            }
+            set
+            {
+                _arguments = value;
+                if (null == _arguments)
+                {
+                    _argumentString = null;
+                }
+                else
+                {
+                    _argumentString = _arguments.QuoteForShell();
+                }
+            }
+        }
+
+        private string _argumentString = null;
+        /// <summary>
+        /// The string of command-line parameters that will be provided to the program, if applicable.
+        /// </summary>
+        public string ArgumentString
+        {
+            get
+            {
+                return _argumentString;
+            }
+        }
+
+        /// <summary>
+        /// The name and optional location of the program to use when creating the sub-process.
+        /// </summary>
+        public string PathToExecutable
+        {
+            get;
+            set;
+        }
+
         #region ICapturedProcess Members
 
         int ICapturedProcess.Run()
