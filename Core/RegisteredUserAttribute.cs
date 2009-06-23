@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace SoftwareNinjas.Core
 {
@@ -70,6 +71,7 @@ namespace SoftwareNinjas.Core
         /// <returns>
         /// A <see cref="RegisteredUserAttribute"/> from the calling assembly.
         /// </returns>
+        [MethodImpl(MethodImplOptions.NoInlining)]
         public static RegisteredUserAttribute ExtractFromCallingAssembly()
         {
             return ExtractFrom(Assembly.GetCallingAssembly ( ));

@@ -45,7 +45,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         }
 
         /// <summary>
-        /// The complement to <see cref="CreateStructure"/>, deletes the base folder.
+        /// The complement to <see cref="CreateStructure()"/>, deletes the base folder.
         /// </summary>
         [TearDown]
         public void WipeStructure()
@@ -122,17 +122,6 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             {
                 Assert.IsTrue(Directory.Exists(Path.Combine(_baseFolder, sub)));
             }
-        }
-
-        /// <summary>
-        /// Tests <see cref="Parent.CleanTask.ParseProjects(string)"/>.
-        /// </summary>
-        [Test]
-        public void ParseProjects_WithSpaces()
-        {
-            EnumerableExtensions.EnumerateSame(
-                new string[] {"One", "Two"},
-                Parent.CleanTask.ParseProjects("One, Two") );
         }
     }
 }

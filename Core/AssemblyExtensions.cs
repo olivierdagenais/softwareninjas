@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace SoftwareNinjas.Core
 {
@@ -36,6 +37,31 @@ namespace SoftwareNinjas.Core
                 result = (T) attributes[0];
             }
             return result;
+        }
+
+        /// <summary>
+        /// Loads the specified manifest resource, scoped by the namespace of the <typeparamref name="T"/> type, from
+        /// the <see cref="Assembly"/> which defines the <typeparamref name="T"/> type.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type whose namespace is used to scope the manifest resource name.
+        /// </typeparam>
+        /// 
+        /// <param name="name">
+        /// The case-sensitive name of the manifest resource being requested.
+        /// </param>
+        /// 
+        /// <returns>
+        /// A <see cref="Stream"/> representing the manifest resource; <see langword="null"/> if no resources were
+        /// specified during compilation or if the resource is not visible to the caller.
+        /// </returns>
+        /// 
+        /// <seealso cref="Assembly.GetManifestResourceStream(Type,String)"/>
+        public static Stream OpenScopedResourceStream<T>(string name)
+        {
+            Type t = typeof(T);
+            return Assembly.GetAssembly(t).GetManifestResourceStream(t, name);
         }
 
         /// <summary>

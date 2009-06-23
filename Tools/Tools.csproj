@@ -39,7 +39,6 @@
   </Target>
   -->
   <ItemGroup>
-    <None Include="CustomInfo_cs.xsl" />
     <None Include="nantcontrib\bin\CollectionGen.dll" />
     <None Include="nantcontrib\bin\Interop.MsmMergeTypeLib.dll" />
     <None Include="nantcontrib\bin\Interop.StarTeam.dll" />

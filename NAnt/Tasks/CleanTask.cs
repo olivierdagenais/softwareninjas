@@ -34,7 +34,7 @@ namespace SoftwareNinjas.NAnt.Tasks
     ///   </code>
     /// </example>
     [TaskName("clean")]
-    public class CleanTask : TestableTask
+    public class CleanTask : AbstractProjectTask
     {
         private static readonly string[] directoriesToClean = { "obj", "bin" };
 
@@ -57,31 +57,11 @@ namespace SoftwareNinjas.NAnt.Tasks
         }
 
         /// <summary>
-        /// The directory in which the projects are found.  The default is the project base directory.
-        /// </summary>
-        [TaskAttribute("basedir", Required = false)]
-        public DirectoryInfo BaseDirectory
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// The name of a specific sub-folder under the <b>obj</b> and <b>bin</b> sub-folders to delete.  The default
         /// is all sub-folders.
         /// </summary>
         [TaskAttribute("configuration", Required = false)]
         public string Configuration
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// A comma-separated list of strings representing sub-folder names where cleaning is to be performed.
-        /// </summary>
-        [TaskAttribute("projects", Required = true)]
-        public string Projects
         {
             get;
             set;
@@ -97,7 +77,7 @@ namespace SoftwareNinjas.NAnt.Tasks
                 BaseDirectory = new DirectoryInfo(Project.BaseDirectory);
             }
 
-            foreach (string project in ParseProjects(Projects))
+            foreach (string project in EnumerateProjects())
             {
                 Log(Level.Info, "Cleaning {0}...", project);
                 var projectDir = Path.Combine(BaseDirectory.FullName, project);
@@ -118,15 +98,6 @@ namespace SoftwareNinjas.NAnt.Tasks
                         Log(Level.Verbose, "Directory '{0}' does not exist", subDir);
                     }
                 }
-            }
-        }
-
-        internal static IEnumerable<String> ParseProjects(string input)
-        {
-            var inputs = input.Split(',');
-            foreach (var project in inputs)
-            {
-                yield return project.Trim();
             }
         }
     }
