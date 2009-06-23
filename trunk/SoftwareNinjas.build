@@ -45,7 +45,7 @@
         <if test="${environment::variable-exists('BUILD_NUMBER')}">
             <foreach item="String" in="${projects}" delim="," property="project">
                 <delete file="${project}/Properties/CustomInfo.cs" />
-                <style style="Tools/CustomInfo_cs.xsl" in="Version.xml"
+                <style style="NAnt/Tasks/CustomInfo_cs.xsl" in="Version.xml"
                        out="${project}/Properties/CustomInfo.cs">
                     <parameters>
                         <parameter namespaceuri=""
