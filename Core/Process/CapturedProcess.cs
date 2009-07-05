@@ -18,7 +18,6 @@ namespace SoftwareNinjas.Core.Process
         private readonly Action<string> _stdOutHandler;
         private readonly Action<string> _stdErrHandler;
         private readonly IEnumerable<object> _arguments;
-        private readonly string _argumentString;
         private readonly string _pathToExecutable;
 
         /// <summary>
@@ -55,12 +54,7 @@ namespace SoftwareNinjas.Core.Process
             _arguments = arguments;
             if (_arguments != null)
             {
-                _argumentString = _arguments.QuoteForShell();
-                startInfo.Arguments = _argumentString;
-            }
-            else
-            {
-                _argumentString = null;
+                startInfo.Arguments = _arguments.QuoteForShell();
             }
 
             startInfo.CreateNoWindow = true;
@@ -97,7 +91,11 @@ namespace SoftwareNinjas.Core.Process
         {
             get
             {
-                return _argumentString;
+                return _associatedProcess.StartInfo.Arguments;
+            }
+            set
+            {
+                _associatedProcess.StartInfo.Arguments = value;
             }
         }
 

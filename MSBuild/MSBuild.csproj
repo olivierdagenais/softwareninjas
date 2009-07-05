@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{ECF90A5B-D97A-4E1D-B76C-CDC6ECE2AE03}</ProjectGuid>
+    <ProjectGuid>{7B242400-8400-447E-BD0A-FA195DB1D4D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SoftwareNinjas.Core</RootNamespace>
-    <AssemblyName>SoftwareNinjas.Core</AssemblyName>
+    <RootNamespace>SoftwareNinjas.MSBuild</RootNamespace>
+    <AssemblyName>SoftwareNinjas.MSBuild</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\SoftwareNinjas.Core.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\SoftwareNinjas.MSBuild.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,32 +30,32 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\SoftwareNinjas.Core.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\SoftwareNinjas.MSBuild.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Tools\nant\bin\lib\net\2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\Tools\nant\bin\lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities" />
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyExtensions.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="Pair.cs" />
-    <Compile Include="Process\CapturedProcess.cs" />
-    <Compile Include="Process\CapturedProcessFactory.cs" />
-    <Compile Include="Process\ICapturedProcess.cs" />
-    <Compile Include="Process\ICapturedProcessFactory.cs" />
-    <Compile Include="Process\Test\CapturedProcess.cs" />
-    <Compile Include="Process\Test\SimulatedCapturedProcess.cs" />
-    <Compile Include="Process\Test\SimulatedCapturedProcessFactory.cs" />
-    <Compile Include="System\Delegates.cs" />
-    <Compile Include="System\Runtime\CompilerServices\ExtensionAttribute.cs" />
+    <Compile Include="Jar.cs" />
+    <Compile Include="JavaCompiler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\CustomInfo.cs" />
-    <Compile Include="RegisteredUserAttribute.cs" />
-    <Compile Include="Test\EnumerableExtensions.cs" />
+    <Compile Include="ResolveJavaReferences.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{ECF90A5B-D97A-4E1D-B76C-CDC6ECE2AE03}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SoftwareNinjas.Java.targets" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -24,6 +24,7 @@ namespace SoftwareNinjas.Core.Process
         string ArgumentString
         {
             get;
+            set;
         }
 
         /// <summary>

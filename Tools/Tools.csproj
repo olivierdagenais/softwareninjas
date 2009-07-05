@@ -53,6 +53,7 @@
     <None Include="nant\bin\lib\ICSharpCode.SharpCvsLib.Console.dll" />
     <None Include="nant\bin\lib\ICSharpCode.SharpCvsLib.dll" />
     <None Include="nant\bin\lib\ICSharpCode.SharpZipLib.dll" />
+    <None Include="nant\bin\lib\ICSharpCode.SharpZipLib.xml" />
     <None Include="nant\bin\lib\mono\2.0\NDoc.Core.dll" />
     <None Include="nant\bin\lib\mono\2.0\NDoc.Documenter.Msdn.dll" />
     <None Include="nant\bin\lib\mono\2.0\NDoc.ExtendedUI.dll" />

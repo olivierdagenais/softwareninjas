@@ -13,6 +13,8 @@ public class Test
 		ee.Compose_Prefix();
 	}
 }</code></pre>
+## Could be implemented using custom .targets file that either compiles code twice or converts newly-compiled assembly to JAR
 # Convert or create a Java NUnit test runner (try @NUnit.Console@ first)
 # Investigate merging all JARs together
 # Update build script to compile to Java and run unit tests after the C# unit tests
+# @Test@ NAnt project task which invokes either NUnit or JUnit and prints the results, optionally outputting a report for consumption by external tools

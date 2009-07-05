@@ -131,6 +131,10 @@ namespace SoftwareNinjas.Core.Process.Test
             {
                 return _argumentString;
             }
+            set
+            {
+                _argumentString = value;
+            }
         }
 
         /// <summary>
