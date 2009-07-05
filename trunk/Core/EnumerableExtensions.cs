@@ -31,9 +31,12 @@ namespace SoftwareNinjas.Core
         public static IEnumerable<T> Compose<T>(T firstItem, IEnumerable<T> items)
         {
             yield return firstItem;
-            foreach (T item in items)
+            if (items != null)
             {
-                yield return item;
+                foreach (T item in items)
+                {
+                    yield return item;
+                }
             }
         }
 
@@ -58,9 +61,12 @@ namespace SoftwareNinjas.Core
         /// </returns>
         public static IEnumerable<T> Compose<T>(IEnumerable<T> items, T lastItem)
         {
-            foreach (T item in items)
+            if (items != null)
             {
-                yield return item;
+                foreach (T item in items)
+                {
+                    yield return item;
+                }
             }
             yield return lastItem;
         }
@@ -88,13 +94,19 @@ namespace SoftwareNinjas.Core
         /// </returns>
         public static IEnumerable<T> Compose<T>(IEnumerable<T> firstItems, IEnumerable<T> lastItems)
         {
-            foreach (T item in firstItems)
+            if (firstItems != null)
             {
-                yield return item;
+                foreach (T item in firstItems)
+                {
+                    yield return item;
+                }
             }
-            foreach (T item in lastItems)
+            if (lastItems != null)
             {
-                yield return item;
+                foreach (T item in lastItems)
+                {
+                    yield return item;
+                }
             }
         }
 
