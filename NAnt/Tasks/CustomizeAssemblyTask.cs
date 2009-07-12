@@ -81,7 +81,7 @@ namespace SoftwareNinjas.NAnt.Tasks
         }
 
         /// <summary>
-        /// Paramterized cosntructor for unit testing.
+        /// Parameterized cosntructor for unit testing.
         /// </summary>
         /// 
         /// <param name="logging">
@@ -150,14 +150,6 @@ namespace SoftwareNinjas.NAnt.Tasks
                 return;
             }
 
-            #region BaseDirectory
-            if (null == BaseDirectory)
-            {
-                BaseDirectory = new DirectoryInfo(Project.BaseDirectory);
-                Log(Level.Verbose, "BaseDirectory = {0}", BaseDirectory.FullName);
-            }
-            #endregion
-
             #region transform
             Log(Level.Verbose, "Loading stylesheet...");
             var transform = new XslCompiledTransform();
@@ -202,7 +194,7 @@ namespace SoftwareNinjas.NAnt.Tasks
             addParam("registeredUserEmailAddress", _registeredUserEmailAddress);
             #endregion
 
-            foreach (string project in EnumerateProjects())
+            foreach (string project in EnumerateProjectNames())
             {
                 Log(Level.Info, "Customizing {0}...", project);
                 var projectDir = Path.Combine(BaseDirectory.FullName, project);

@@ -23,14 +23,26 @@ namespace SoftwareNinjas.NAnt.Tasks
         {
         }
 
+        private DirectoryInfo _baseDirectory;
         /// <summary>
         /// The directory in which the projects are found.  The default is the project base directory.
         /// </summary>
         [TaskAttribute("basedir", Required = false)]
         public DirectoryInfo BaseDirectory
         {
-            get;
-            set;
+            get
+            {
+                if (_baseDirectory == null && Project != null)
+                {
+                    _baseDirectory = new DirectoryInfo(Project.BaseDirectory);
+                    Log(Level.Verbose, "Initializing default BaseDirectory to {0}", _baseDirectory.FullName);
+                }
+                return _baseDirectory;
+            }
+            set
+            {
+                _baseDirectory = value;
+            }
         }
 
         /// <summary>
@@ -44,18 +56,18 @@ namespace SoftwareNinjas.NAnt.Tasks
         }
 
         /// <summary>
-        /// Allows sub-classes to process projects one by one.
+        /// Allows sub-classes to process project names one by one.
         /// </summary>
         /// 
         /// <returns>
         /// An <see cref="IEnumerable{T}"/> of <see cref="String"/> representing individual projects.
         /// </returns>
-        public IEnumerable<string> EnumerateProjects()
+        public IEnumerable<string> EnumerateProjectNames()
         {
-            return ParseProjects(Projects);
+            return ParseProjectNames(Projects);
         }
 
-        internal static IEnumerable<String> ParseProjects(string input)
+        internal static IEnumerable<String> ParseProjectNames(string input)
         {
             var inputs = input.Split(',');
             foreach (var project in inputs)
