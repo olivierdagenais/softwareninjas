@@ -56,6 +56,23 @@ namespace SoftwareNinjas.NAnt.Tasks
         }
 
         /// <summary>
+        /// Allows sub-classes to process <see cref="Project"/> instances one by one.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// An <see cref="IEnumerable{T}"/> of <see cref="Project"/> instances representing individual projects.
+        /// </returns>
+        public IEnumerable<Project> EnumerateProjects()
+        {
+            ProjectLoader loader = new ProjectLoader();
+            var solutionFolder = BaseDirectory.FullName;
+            foreach (string projectName in EnumerateProjectNames())
+            {
+                yield return loader.Create(solutionFolder, projectName);
+            }
+        }
+
+        /// <summary>
         /// Allows sub-classes to process project names one by one.
         /// </summary>
         /// 
