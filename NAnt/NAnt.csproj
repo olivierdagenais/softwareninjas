@@ -51,10 +51,14 @@
     <Compile Include="Tasks\AssemblyToJarTask.cs" />
     <Compile Include="Tasks\CleanTask.cs" />
     <Compile Include="Tasks\CustomizeAssemblyTask.cs" />
+    <Compile Include="Tasks\Project.cs" />
+    <Compile Include="Tasks\ProjectLoader.cs" />
+    <Compile Include="Tasks\SupportedLanguage.cs" />
     <Compile Include="Tasks\TestableTask.cs" />
     <Compile Include="Tasks\Test\AssemblyToJarTask.cs" />
     <Compile Include="Tasks\Test\CleanTask.cs" />
     <Compile Include="Tasks\Test\CustomizeAssemblyTask.cs" />
+    <Compile Include="Tasks\Test\ProjectLoader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
