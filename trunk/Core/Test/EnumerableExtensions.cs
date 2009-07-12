@@ -67,12 +67,39 @@ namespace SoftwareNinjas.Core.Test
         /// </param>
         public static void EnumerateSame<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
+            EnumerateSame(expected, actual, (t) => t);
+        }
+
+        /// <summary>
+        /// Convenience method for making sure two <see cref="IEnumerable{T}"/> instances will enumerate identical
+        /// items.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of elements to enumerate.
+        /// </typeparam>
+        /// 
+        /// <param name="expected">
+        /// The expected elements.
+        /// </param>
+        /// 
+        /// <param name="actual">
+        /// The actual elements.
+        /// </param>
+        /// 
+        /// <param name="comparisonBasis">
+        /// A method to use to manipulate the <typeparamref name="T"/> (perhaps extract a value) into what will be
+        /// used to check if each <typeparamref name="T"/> is equal.
+        /// </param>
+        public static void EnumerateSame<T>(IEnumerable<T> expected, IEnumerable<T> actual, 
+            Func<T, Object> comparisonBasis )
+        {
             var eEnum = expected.GetEnumerator();
             var aEnum = actual.GetEnumerator();
             while (eEnum.MoveNext())
             {
                 Assert.IsTrue(aEnum.MoveNext());
-                Assert.AreEqual(eEnum.Current, aEnum.Current);
+                Assert.AreEqual(comparisonBasis(eEnum.Current), comparisonBasis(aEnum.Current));
             }
             Assert.IsFalse(aEnum.MoveNext());
         }

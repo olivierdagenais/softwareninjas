@@ -18,3 +18,7 @@ public class Test
 # Investigate merging all JARs together
 # Update build script to compile to Java and run unit tests after the C# unit tests
 # @Test@ NAnt project task which invokes either NUnit or JUnit and prints the results, optionally outputting a report for consumption by external tools
+## Knows the type of project (C#/.NET or Java) based on @Project/Import/\@Project@ filename: @SoftwareNinjas.Java.Targets@ means Java, otherwise C#
+## Builds classpath from the @Project/ItemGroup/Reference/HintPath@ elements found in the @.csproj@ file (relative from project's directory)
+## @org.junit.runner.JUnitCore@
+## Scans the supplied JAR for @.class@ file names ending in @Test@

@@ -72,12 +72,7 @@ namespace SoftwareNinjas.NAnt.Tasks
         /// </summary>
         protected override void ExecuteTask()
         {
-            if (null == BaseDirectory)
-            {
-                BaseDirectory = new DirectoryInfo(Project.BaseDirectory);
-            }
-
-            foreach (string project in EnumerateProjects())
+            foreach (string project in EnumerateProjectNames())
             {
                 Log(Level.Info, "Cleaning {0}...", project);
                 var projectDir = Path.Combine(BaseDirectory.FullName, project);
