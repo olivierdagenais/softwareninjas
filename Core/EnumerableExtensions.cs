@@ -28,7 +28,7 @@ namespace SoftwareNinjas.Core
         /// <returns>
         /// An enumeration of <paramref name="firstItem"/> and then all the items in <paramref name="items"/>.
         /// </returns>
-        public static IEnumerable<T> Compose<T>(T firstItem, IEnumerable<T> items)
+        public static IEnumerable<T> Compose<T>(this T firstItem, IEnumerable<T> items)
         {
             yield return firstItem;
             if (items != null)
@@ -59,7 +59,7 @@ namespace SoftwareNinjas.Core
         /// <returns>
         /// An enumeration of all the items in <paramref name="items"/> and then <paramref name="lastItem"/>.
         /// </returns>
-        public static IEnumerable<T> Compose<T>(IEnumerable<T> items, T lastItem)
+        public static IEnumerable<T> Compose<T>(this IEnumerable<T> items, T lastItem)
         {
             if (items != null)
             {
@@ -92,7 +92,7 @@ namespace SoftwareNinjas.Core
         /// An enumeration of all the items in <paramref name="firstItems"/> and then all those in
         /// <paramref name="lastItems"/>.
         /// </returns>
-        public static IEnumerable<T> Compose<T>(IEnumerable<T> firstItems, IEnumerable<T> lastItems)
+        public static IEnumerable<T> Compose<T>(this IEnumerable<T> firstItems, IEnumerable<T> lastItems)
         {
             if (firstItems != null)
             {
@@ -104,6 +104,38 @@ namespace SoftwareNinjas.Core
             if (lastItems != null)
             {
                 foreach (T item in lastItems)
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Filters a set of <paramref name="items"/> of type <typeparamref name="T"/> based on the provided
+        /// <paramref name="predicate"/>.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of elements to enumerate.
+        /// </typeparam>
+        /// 
+        /// <param name="items">
+        /// The items to filter.
+        /// </param>
+        /// 
+        /// <param name="predicate">
+        /// A function that determines whether to keep each item (<see langword="true"/>)
+        /// or not (<see langword="false"/>).
+        /// </param>
+        /// 
+        /// <returns>
+        /// The <paramref name="items"/> for which <paramref name="predicate"/> returned <see langword="true"/>.
+        /// </returns>
+        public static IEnumerable<T> Filter<T>(this IEnumerable<T> items, Func<T, bool> predicate)
+        {
+            foreach (T item in items)
+            {
+                if (predicate(item))
                 {
                     yield return item;
                 }
@@ -172,6 +204,7 @@ namespace SoftwareNinjas.Core
         /// <seealso cref="String.Join(String, String[])"/>
         public static string Join<T>(this IEnumerable<T> values, string separator, Func<T, string> stringifier)
         {
+            // TODO: Join() is really a special case of Map() and Reduce(); consider extracting Reduce() and re-writing
             StringBuilder sb = new StringBuilder();
             var e = values.GetEnumerator();
             if (e.MoveNext())
@@ -184,6 +217,40 @@ namespace SoftwareNinjas.Core
                 }
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Applies a transformation on every item of type <typeparamref name="T"/> in <paramref name="items"/> to
+        /// yield as many items of type <typeparamref name="TResult"/>.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of items to convert from.
+        /// </typeparam>
+        /// 
+        /// <typeparam name="TResult">
+        /// The type of items to convert to.
+        /// </typeparam>
+        /// 
+        /// <param name="items">
+        /// One or more <typeparamref name="T"/> instances to convert.
+        /// </param>
+        /// 
+        /// <param name="transformer">
+        /// A method that accepts an instance of <typeparamref name="T"/> and produces an instance of
+        /// <typeparamref name="TResult"/>.
+        /// </param>
+        /// 
+        /// <returns>
+        /// A number of <typeparamref name="TResult"/> instances that were created from <typeparamref name="T"/>
+        /// instances.
+        /// </returns>
+        public static IEnumerable<TResult> Map<T, TResult>(this IEnumerable<T> items, Func<T, TResult> transformer)
+        {
+            foreach (T item in items)
+            {
+                yield return transformer(item);
+            }
         }
 
         /// <summary>

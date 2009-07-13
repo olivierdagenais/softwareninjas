@@ -36,9 +36,6 @@ namespace SoftwareNinjas.MSBuild
     /// </example>
     public class JavaCompiler : Task
     {
-        private const string javaDevelopmentKit16 =
-            @"HKEY_LOCAL_MACHINE\Software\JavaSoft\Java Development Kit\1.6";
-
         #region Properties
         /// <summary>
         /// Compilation-time parameters.
@@ -112,17 +109,6 @@ namespace SoftwareNinjas.MSBuild
             set;
         }
         #endregion
-
-        internal static string GenerateFullPathToCompiler()
-        {
-            string javaHomePath = Registry.GetValue(javaDevelopmentKit16, "JavaHome", null) as string;
-            if (null == javaHomePath)
-            {
-                throw new ArgumentException("Unable to find an installation of the Java Development Kit (JDK) 1.6");
-            }
-            string compiler = Path.Combine(javaHomePath, "bin/javac.exe");
-            return compiler;
-        }
 
         internal static string GenerateCompilerCommandLine(
             string outputFolder, ITaskItem[] references, ITaskItem[] sources, bool emitDebugInformation,
@@ -208,18 +194,20 @@ namespace SoftwareNinjas.MSBuild
         {
             // TODO: We may eventually want to check first if the output JAR is up-to-date against the inputs
             // TODO: We might need to delete the contents of the obj folder first
-            var process = new CapturedProcess(
-                GenerateFullPathToCompiler(),
-                null, 
-                (line) => Log.LogMessage(MessageImportance.Normal, line), 
-                (line) => Log.LogMessage(MessageImportance.High, line));
-
+            int exitCode;
             var outputFolder = Path.GetDirectoryName(OutputAssembly);
-            process.ArgumentString =
-                GenerateCompilerCommandLine(outputFolder, References, Sources, EmitDebugInformation, DisabledWarnings);
-            Log.LogCommandLine(MessageImportance.Normal, process.ArgumentString);
+            using (var process = new CapturedProcess(
+                Java.GenerateFullPathToCompiler(),
+                null,
+                (line) => Log.LogMessage(MessageImportance.Normal, line),
+                (line) => Log.LogMessage(MessageImportance.High, line)))
+            {
+                process.ArgumentString =
+                    GenerateCompilerCommandLine(outputFolder, References, Sources, EmitDebugInformation, DisabledWarnings);
+                Log.LogCommandLine(MessageImportance.Normal, process.ArgumentString);
 
-            int exitCode = process.Run();
+                exitCode = process.Run();
+            }
             if (exitCode != 0)
             {
                 Log.LogError("Process exited with code {0}", exitCode);

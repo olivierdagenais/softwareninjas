@@ -33,9 +33,21 @@
     <DocumentationFile>bin\Release\SoftwareNinjas.NAnt.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\nant\bin\lib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="NAnt.Core, Version=0.85.2478.0, Culture=neutral">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\nant\bin\NAnt.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="NAnt.NUnit, Version=0.85.2478.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\nant\bin\NAnt.NUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="NAnt.NUnit2Tasks, Version=0.85.2478.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\nant\bin\NAnt.NUnit2Tasks.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -55,10 +67,12 @@
     <Compile Include="Tasks\ProjectLoader.cs" />
     <Compile Include="Tasks\SupportedLanguage.cs" />
     <Compile Include="Tasks\TestableTask.cs" />
+    <Compile Include="Tasks\TestTask.cs" />
     <Compile Include="Tasks\Test\AssemblyToJarTask.cs" />
     <Compile Include="Tasks\Test\CleanTask.cs" />
     <Compile Include="Tasks\Test\CustomizeAssemblyTask.cs" />
     <Compile Include="Tasks\Test\ProjectLoader.cs" />
+    <Compile Include="Tasks\Test\TestTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
