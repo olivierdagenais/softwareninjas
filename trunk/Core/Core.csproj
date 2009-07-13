@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
+    <Compile Include="Java.cs" />
     <Compile Include="Pair.cs" />
     <Compile Include="Process\CapturedProcess.cs" />
     <Compile Include="Process\CapturedProcessFactory.cs" />

@@ -7,7 +7,7 @@
     <loadtasks assembly="Tools/nantcontrib/bin/NAnt.Contrib.Tasks.dll" />
 
     <property name="configuration" value="Debug" overwrite="false" />
-    <property name="projects" value="Core,NAnt" />
+    <property name="projects" value="Core,MSBuild,NAnt" />
 
     <target name="schema">
         <nantschema output="Tools/NAnt.xsd" target-ns="http://softwareninjas.googlecode.com/schemas/nant.xsd"/>
