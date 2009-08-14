@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<project name="Branch And Review Tools" default="deploy"
+    xmlns="http://softwareninjas.googlecode.com/schemas/nant.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://softwareninjas.googlecode.com/schemas/nant.xsd Tools/NAnt.xsd">
+
+    <loadtasks assembly="Tools/nantcontrib/bin/NAnt.Contrib.Tasks.dll" />
+
+    <property name="configuration" value="Debug" overwrite="false" />
+    <property name="projects" value="Core,MSBuild,NAnt" />
+
+    <target name="schema">
+        <nantschema output="Tools/NAnt.xsd" target-ns="http://softwareninjas.googlecode.com/schemas/nant.xsd"/>
+    </target>
+
+    <target name="convertDependencies">
+        <property name="deps" value="Tools/nant/bin/lib/net/2.0/nunit.framework.dll"/>
+
+        <readregistry property="mainsoftBin" key="SOFTWARE\Mainsoft\Mainsoft for Java EE 2.5\9.0\basedir" />
+        <property name="netfx2" value="${framework::get-framework-directory('net-2.0')}"/>
+        <foreach item="String" in="${deps}" delim="," property="dep">
+            <echo message="Converting ${dep}..."/>
+            <exec program="Converter.exe" basedir="${mainsoftBin}" workingdir="${path::get-directory-name(dep)}">
+                <arg value="${path::get-file-name(dep)}" />
+                <arg value="/lib:${netfx2};." />
+                <arg value="/out:${path::get-file-name-without-extension(dep)}.jar" />
+            </exec>
+            <delete file="${path::change-extension(dep, '.vmwdb')}" />
+        </foreach>
+    </target>
+    
+    <target name="clean">
+        <!-- TODO: make this re-usable -->
+        <foreach item="String" in="${projects}" delim="," property="project">
+            <foreach item="String" in="obj,bin" delim="," property="dir">
+                <delete dir="${project}/${dir}/${configuration}"
+                        if="${directory::exists(project + '/' + dir + '/' + configuration)}"
+                        failonerror="false" />
+            </foreach>
+        </foreach>
+    </target>
+
+    <target name="customize" depends="clean">
+        <!-- TODO: make this re-usable and add optional support for registered users -->
+        <if test="${environment::variable-exists('BUILD_NUMBER')}">
+            <foreach item="String" in="${projects}" delim="," property="project">
+                <delete file="${project}/Properties/CustomInfo.cs" />
+                <style style="NAnt/Tasks/CustomInfo_cs.xsl" in="Version.xml"
+                       out="${project}/Properties/CustomInfo.cs">
+                    <parameters>
+                        <parameter namespaceuri=""
+                                   name="buildNumber"
+                                   value="${environment::get-variable('BUILD_NUMBER')}"/>
+                    </parameters>
+                </style>
+            </foreach>
+        </if>
+    </target>
+
+    <target name="compile" depends="customize">
+        <msbuild project="SoftwareNinjas.sln">
+            <arg value="/property:Configuration=${configuration}" />
+            <arg value="/verbosity:minimal" />
+        </msbuild>
+    </target>
+
+    <target name="test" depends="compile">
+        <foreach item="String" in="${projects}" delim="," property="project">
+            <echo message="Testing ${project}..."/>
+            <nunit2>
+                <formatter type="Plain" />
+                <test>
+                    <assemblies>
+                        <include name="${project}/bin/${configuration}/SoftwareNinjas.${project}.dll" />
+                    </assemblies>
+                </test>
+            </nunit2>
+            <!-- TODO: verify assemblies with FxCop -->
+        </foreach>
+    </target>
+
+    <target name="documentation" depends="test">
+        <!-- TODO: implement -->
+    </target>
+
+    <target name="deploy" depends="documentation">
+        <xmlpeek file="Version.xml" xpath="/version/@major" property="major" />
+        <xmlpeek file="Version.xml" xpath="/version/@minor" property="minor" />
+        <if test="${environment::variable-exists('BUILD_NUMBER')}">
+            <property name="buildNumber" value="${environment::get-variable('BUILD_NUMBER')}"/>
+        </if>
+        <if test="${not environment::variable-exists('BUILD_NUMBER')}">
+            <property name="buildNumber" value="private"/>
+        </if>
+        <property name="versionFolder" value="SoftwareNinjas-${major}.${minor}.${buildNumber}"/>
+
+        <delete dir="Deploy" failonerror="false"/>
+        <mkdir dir="Deploy/${versionFolder}"/>
+        <copy todir="Deploy/${versionFolder}" flatten="true">
+            <fileset>
+                <include name="*/bin/${configuration}/SoftwareNinjas.*.dll"/>
+                <include name="*/bin/${configuration}/SoftwareNinjas.*.xml"/>
+                <include name="MSBuild/SoftwareNinjas.*.targets"/>
+            </fileset>
+        </copy>
+        <copy todir="Deploy/${versionFolder}/doc">
+            <fileset basedir="Documentation">
+                <include name="**"/>
+            </fileset>
+        </copy>
+
+        <zip zipfile="Deploy/${versionFolder}.zip">
+            <fileset basedir="Deploy">
+                <include name="${versionFolder}/**"/>
+            </fileset>
+        </zip>
+
+        <!-- TODO: create installer -->
+    </target>
+
+    <target name="release">
+        <property name="configuration" value="release" />
+        <call target="deploy" />
+    </target>
+</project>

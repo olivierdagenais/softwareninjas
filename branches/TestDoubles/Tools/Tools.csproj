@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{18687B8E-FF02-414A-8826-3FFB65366C07}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tools</RootNamespace>
+    <AssemblyName>Tools</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ItemGroup>
+    <None Include="nantcontrib\bin\CollectionGen.dll" />
+    <None Include="nantcontrib\bin\Interop.MsmMergeTypeLib.dll" />
+    <None Include="nantcontrib\bin\Interop.StarTeam.dll" />
+    <None Include="nantcontrib\bin\Interop.WindowsInstaller.dll" />
+    <None Include="nantcontrib\bin\NAnt.Contrib.Tasks.dll" />
+    <None Include="nantcontrib\bin\NAnt.Contrib.Tasks.xml" />
+    <None Include="nantcontrib\bin\SLiNgshoT.Core.dll" />
+    <None Include="nantcontrib\bin\SLiNgshoT.exe" />
+    <None Include="nantcontrib\bin\SourceSafe.Interop.dll" />
+    <None Include="nantcontrib\license.txt" />
+    <None Include="nantcontrib\readme.txt" />
+    <None Include="nant\bin\lib\ICSharpCode.SharpCvsLib.Console.dll" />
+    <None Include="nant\bin\lib\ICSharpCode.SharpCvsLib.dll" />
+    <None Include="nant\bin\lib\ICSharpCode.SharpZipLib.dll" />
+    <None Include="nant\bin\lib\ICSharpCode.SharpZipLib.xml" />
+    <None Include="nant\bin\lib\mono\2.0\NDoc.Core.dll" />
+    <None Include="nant\bin\lib\mono\2.0\NDoc.Documenter.Msdn.dll" />
+    <None Include="nant\bin\lib\mono\2.0\NDoc.ExtendedUI.dll" />
+    <None Include="nant\bin\lib\mono\2.0\nunit.core.dll" />
+    <None Include="nant\bin\lib\mono\2.0\nunit.framework.dll" />
+    <None Include="nant\bin\lib\mono\2.0\nunit.util.dll" />
+    <None Include="nant\bin\lib\net\2.0\NDoc.Core.dll" />
+    <None Include="nant\bin\lib\net\2.0\NDoc.Documenter.Msdn.dll" />
+    <None Include="nant\bin\lib\net\2.0\NDoc.ExtendedUI.dll" />
+    <None Include="nant\bin\lib\net\2.0\nunit.core.dll" />
+    <None Include="nant\bin\lib\net\2.0\nunit.framework.dll" />
+    <None Include="nant\bin\lib\net\2.0\nunit.util.dll" />
+    <None Include="nant\bin\lib\NUnitCore.dll" />
+    <None Include="nant\bin\log4net.dll" />
+    <None Include="nant\bin\NAnt.CompressionTasks.dll" />
+    <None Include="nant\bin\NAnt.CompressionTasks.xml" />
+    <None Include="nant\bin\NAnt.Core.dll" />
+    <None Include="nant\bin\NAnt.Core.xml" />
+    <None Include="nant\bin\NAnt.DotNetTasks.dll" />
+    <None Include="nant\bin\NAnt.DotNetTasks.xml" />
+    <None Include="nant\bin\NAnt.exe" />
+    <None Include="nant\bin\NAnt.MSNetTasks.dll" />
+    <None Include="nant\bin\NAnt.MSNetTasks.xml" />
+    <None Include="nant\bin\NAnt.NUnit.dll" />
+    <None Include="nant\bin\NAnt.NUnit.xml" />
+    <None Include="nant\bin\NAnt.NUnit1Tasks.dll" />
+    <None Include="nant\bin\NAnt.NUnit1Tasks.xml" />
+    <None Include="nant\bin\NAnt.NUnit2Tasks.dll" />
+    <None Include="nant\bin\NAnt.NUnit2Tasks.xml" />
+    <None Include="nant\bin\NAnt.SourceControlTasks.dll" />
+    <None Include="nant\bin\NAnt.SourceControlTasks.xml" />
+    <None Include="nant\bin\NAnt.VisualCppTasks.dll" />
+    <None Include="nant\bin\NAnt.VisualCppTasks.xml" />
+    <None Include="nant\bin\NAnt.VSNetTasks.dll" />
+    <None Include="nant\bin\NAnt.VSNetTasks.xml" />
+    <None Include="nant\bin\NAnt.Win32Tasks.dll" />
+    <None Include="nant\bin\NAnt.Win32Tasks.xml" />
+    <None Include="nant\bin\NAnt.xml" />
+    <None Include="nant\bin\NDoc.Documenter.NAnt.dll" />
+    <None Include="nant\bin\scvs.exe" />
+    <None Include="nant\COPYING.txt" />
+    <None Include="nant\README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="NAnt.xsd" />
+    <None Include="nantcontrib\bin\MSITaskErrors.mst" />
+    <None Include="nantcontrib\bin\MSITaskTemplate.msi" />
+    <None Include="nantcontrib\bin\MSMTaskErrors.mst" />
+    <None Include="nantcontrib\bin\MSMTaskTemplate.msm" />
+    <None Include="nantcontrib\doc\NAnt contrib Help.URL" />
+    <None Include="nantcontrib\schema\nantcontrib.xsd" />
+    <None Include="nant\bin\NAnt.exe.config" />
+    <None Include="nant\doc\NAnt Help.URL" />
+    <None Include="nant\schema\nant.xsd" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="echo.exe" />
+  </ItemGroup>
+</Project>
