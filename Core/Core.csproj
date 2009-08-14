@@ -44,6 +44,7 @@
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Java.cs" />
     <Compile Include="Pair.cs" />
+    <Compile Include="PairList.cs" />
     <Compile Include="Process\CapturedProcess.cs" />
     <Compile Include="Process\CapturedProcessFactory.cs" />
     <Compile Include="Process\ICapturedProcess.cs" />
@@ -56,6 +57,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\CustomInfo.cs" />
     <Compile Include="RegisteredUserAttribute.cs" />
+    <Compile Include="TestDoubles\Stubs\ParsedMethod.cs" />
+    <Compile Include="TestDoubles\Stubs\ParsedParameter.cs" />
+    <Compile Include="TestDoubles\Stubs\StubGenerator.cs" />
+    <Compile Include="TestDoubles\Stubs\Test\IOneMethodNoArgs.cs" />
+    <Compile Include="TestDoubles\Stubs\Test\SOneMethodNoArgs.cs" />
+    <Compile Include="TestDoubles\Stubs\Test\StubGenerator.cs" />
     <Compile Include="Test\EnumerableExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
