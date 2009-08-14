@@ -58,5 +58,23 @@ namespace SoftwareNinjas.Core
                 return _second;
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj != null && obj is Pair<F, S>)
+            {
+                Pair<F, S> that = (Pair<F, S>) obj;
+                return Equals(this.First, that.First) && Equals(this.Second, that.Second);
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            int h = 17;
+            h = h *  31 + (_first == null ? 0 : _first.GetHashCode());
+            h = h * 31 + ( _second == null ? 0 : _second.GetHashCode() );
+            return h;
+        }
     }
 }
