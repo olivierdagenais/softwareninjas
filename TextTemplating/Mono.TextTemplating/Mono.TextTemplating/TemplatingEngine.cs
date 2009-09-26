@@ -258,6 +258,7 @@ namespace Mono.TextTemplating
 			
 			//prep the type
 			var type = new CodeTypeDeclaration (settings.Name);
+			type.IsPartial = true;
 			if (!String.IsNullOrEmpty (settings.Inherits))
 				type.BaseTypes.Add (new CodeTypeReference (settings.Inherits));
 			else
