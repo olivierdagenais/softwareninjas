@@ -100,10 +100,10 @@ namespace Mono.TextTemplating
 			}
 
 			//resolve and add assembly references
-			HashSet<string> assemblies = new HashSet<string> ();
-			assemblies.UnionWith (settings.Assemblies);
-			assemblies.UnionWith (host.StandardAssemblyReferences);
-			foreach (string assem in assemblies) {
+			var assemblies = new Dictionary<string, object>();
+			UnionWith(assemblies, settings.Assemblies);
+			UnionWith(assemblies, host.StandardAssemblyReferences);
+			foreach (string assem in assemblies.Keys) {
 				string resolvedAssem = host.ResolveAssemblyReference (assem);
 				if (!String.IsNullOrEmpty (resolvedAssem)) {
 					pars.ReferencedAssemblies.Add (resolvedAssem);
@@ -231,6 +231,17 @@ namespace Mono.TextTemplating
 			return false;
 		}
 		
+		internal static void UnionWith<TKey, TValue>(Dictionary<TKey, TValue> dest, IEnumerable<TKey> source)
+		{
+			foreach (TKey item in source)
+			{
+				if (!dest.ContainsKey(item))
+				{
+					dest.Add(item, default (TValue));
+				}
+			}
+		}
+
 		public static CodeCompileUnit GenerateCompileUnit (ITextTemplatingEngineHost host, ParsedTemplate pt,
 		                                                   TemplateSettings settings)
 		{
@@ -239,10 +250,10 @@ namespace Mono.TextTemplating
 			var namespac = new CodeNamespace (settings.Namespace);
 			ccu.Namespaces.Add (namespac);
 			
-			var imports = new HashSet<string> ();
-			imports.UnionWith (settings.Imports);
-			imports.UnionWith (host.StandardImports);
-			foreach (string ns in imports)
+			var imports = new Dictionary<string, object> ();
+			UnionWith (imports, settings.Imports);
+			UnionWith (imports, host.StandardImports);
+			foreach (string ns in imports.Keys)
 				namespac.Imports.Add (new CodeNamespaceImport (ns));
 			
 			//prep the type
