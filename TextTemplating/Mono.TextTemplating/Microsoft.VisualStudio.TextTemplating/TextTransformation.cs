@@ -27,7 +27,9 @@
 using System;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
+using System.Reflection;
 
 namespace Microsoft.VisualStudio.TextTemplating
 {
@@ -39,11 +41,19 @@ namespace Microsoft.VisualStudio.TextTemplating
 		string currentIndent = "";
 		CompilerErrorCollection errors = new CompilerErrorCollection ();
 		StringBuilder builder = new StringBuilder ();
+		readonly IFormatProvider formatProvider;
+		readonly object[] formatProviderAsParameterArray;
 		
-		public TextTransformation ()
+		public TextTransformation () : this (CultureInfo.InvariantCulture)
 		{
 		}
 		
+		public TextTransformation (IFormatProvider formatProvider)
+		{
+			this.formatProvider = formatProvider;
+			this.formatProviderAsParameterArray = new object[] { formatProvider };
+		}
+
 		protected internal virtual void Initialize ()
 		{
 		}
@@ -109,6 +119,21 @@ namespace Microsoft.VisualStudio.TextTemplating
 		
 		#region Writing
 		
+		internal string ToStringWithCulture (object objectToConvert)
+		{
+			if (objectToConvert == null)
+				return null;
+
+			IConvertible conv = objectToConvert as IConvertible;
+			if (conv != null)
+				return conv.ToString(formatProvider);
+
+			MethodInfo mi = objectToConvert.GetType ().GetMethod ("ToString", new Type[] { typeof (IFormatProvider) });
+			if (mi != null && mi.ReturnType == typeof (String))
+				return (string) mi.Invoke (objectToConvert, formatProviderAsParameterArray);
+			return objectToConvert.ToString ();
+		}
+		
 		protected StringBuilder GenerationEnvironment {
 			get { return builder; }
 			set {
@@ -116,6 +141,11 @@ namespace Microsoft.VisualStudio.TextTemplating
 					throw new ArgumentNullException ();
 				builder = value;
 			}
+		}
+		
+		public void Write (object objectToAppend)
+		{
+			GenerationEnvironment.Append (ToStringWithCulture (objectToAppend));
 		}
 		
 		public void Write (string textToAppend)
