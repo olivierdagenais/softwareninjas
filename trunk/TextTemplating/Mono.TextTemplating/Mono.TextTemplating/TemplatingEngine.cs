@@ -274,7 +274,6 @@ namespace Mono.TextTemplating
 			
 			//method references that will need to be used multiple times
 			var writeMeth = new CodeMethodReferenceExpression (new CodeThisReferenceExpression (), "Write");
-			var toStringMeth = new CodeMethodReferenceExpression (new CodeTypeReferenceExpression (typeof (ToStringHelper)), "ToStringWithCulture");
 			bool helperMode = false;
 			
 			//build the code from the segments
@@ -290,8 +289,7 @@ namespace Mono.TextTemplating
 					break;
 				case SegmentType.Expression:
 					st = new CodeExpressionStatement (
-						new CodeMethodInvokeExpression (writeMeth,
-							new CodeMethodInvokeExpression (toStringMeth, new CodeSnippetExpression (seg.Text))));
+						new CodeMethodInvokeExpression (writeMeth, new CodeSnippetExpression (seg.Text)));
 					break;
 				case SegmentType.Content:
 					st = new CodeExpressionStatement (new CodeMethodInvokeExpression (writeMeth, new CodePrimitiveExpression (seg.Text)));
@@ -357,10 +355,14 @@ namespace Mono.TextTemplating
 
 			IExtendedTextTemplatingEngineHost extendedHost = host as IExtendedTextTemplatingEngineHost;
 			if (extendedHost != null) {
+				// TODO: figure out the culture situation with this version
 				tt = extendedHost.CreateInstance (transformType);
 			}
 			else {
-				tt = (TextTransformation) Activator.CreateInstance (transformType);
+				if (culture != null)
+					tt = (TextTransformation) Activator.CreateInstance (transformType, culture);
+				else
+					tt = (TextTransformation) Activator.CreateInstance (transformType);
 			}
 			
 			//set the host property if it exists
@@ -368,16 +370,10 @@ namespace Mono.TextTemplating
 			if (hostProp != null && hostProp.CanWrite)
 				hostProp.SetValue (tt, host, null);
 			
-			//set the culture
-			if (culture != null)
-				ToStringHelper.FormatProvider = culture;
-			else
-				ToStringHelper.FormatProvider = System.Globalization.CultureInfo.InvariantCulture;
 			
 			tt.Initialize ();
 			string output = tt.TransformText ();
 			host.LogErrors (tt.Errors);
-			ToStringHelper.FormatProvider = System.Globalization.CultureInfo.InvariantCulture;
 			return output;
 		}
 	}
