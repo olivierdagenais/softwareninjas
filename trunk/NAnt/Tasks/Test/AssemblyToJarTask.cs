@@ -20,7 +20,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         /// <summary>
         /// Configures the task to simulate all processing and then asserts on properties of the command-line arguments.
         /// </summary>
-        [Test]
+        [Test, Ignore("Disabled as C# to Java ByteCode support is suspended")]
         public void Execute_Simulated()
         {
             SimulatedCapturedProcess simulated = new SimulatedCapturedProcess(0, (string) null, (string) null);

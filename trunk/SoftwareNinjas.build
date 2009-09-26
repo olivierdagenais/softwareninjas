@@ -13,22 +13,6 @@
         <nantschema output="Tools/NAnt.xsd" target-ns="http://softwareninjas.googlecode.com/schemas/nant.xsd"/>
     </target>
 
-    <target name="convertDependencies">
-        <property name="deps" value="Tools/nant/bin/lib/net/2.0/nunit.framework.dll"/>
-
-        <readregistry property="mainsoftBin" key="SOFTWARE\Mainsoft\Mainsoft for Java EE 2.5\9.0\basedir" />
-        <property name="netfx2" value="${framework::get-framework-directory('net-2.0')}"/>
-        <foreach item="String" in="${deps}" delim="," property="dep">
-            <echo message="Converting ${dep}..."/>
-            <exec program="Converter.exe" basedir="${mainsoftBin}" workingdir="${path::get-directory-name(dep)}">
-                <arg value="${path::get-file-name(dep)}" />
-                <arg value="/lib:${netfx2};." />
-                <arg value="/out:${path::get-file-name-without-extension(dep)}.jar" />
-            </exec>
-            <delete file="${path::change-extension(dep, '.vmwdb')}" />
-        </foreach>
-    </target>
-    
     <target name="clean">
         <!-- TODO: make this re-usable -->
         <foreach item="String" in="${projects}" delim="," property="project">
