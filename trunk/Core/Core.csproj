@@ -40,6 +40,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Microsoft.VisualStudio.TextTemplating\TextTransformation.cs">
+      <Link>Microsoft.VisualStudio.TextTemplating\TextTransformation.cs</Link>
+    </Compile>
     <Compile Include="AssemblyExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="Java.cs" />

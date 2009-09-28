@@ -21,7 +21,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\SoftwareNinjas.MSBuild.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +31,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\SoftwareNinjas.MSBuild.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
@@ -39,14 +41,54 @@
     </Reference>
     <Reference Include="Microsoft.Build.Framework" />
     <Reference Include="Microsoft.Build.Utilities" />
+    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\nant\bin\lib\net\2.0\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Microsoft.VisualStudio.TextTemplating\DirectiveProcessor.cs">
+      <Link>Microsoft.VisualStudio.TextTemplating\DirectiveProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Microsoft.VisualStudio.TextTemplating\DirectiveProcessorException.cs">
+      <Link>Microsoft.VisualStudio.TextTemplating\DirectiveProcessorException.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Microsoft.VisualStudio.TextTemplating\Engine.cs">
+      <Link>Microsoft.VisualStudio.TextTemplating\Engine.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Microsoft.VisualStudio.TextTemplating\ITextTemplatingEngineHost.cs">
+      <Link>Microsoft.VisualStudio.TextTemplating\ITextTemplatingEngineHost.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Microsoft.VisualStudio.TextTemplating\RequiresProvidesDirectiveProcessor.cs">
+      <Link>Microsoft.VisualStudio.TextTemplating\RequiresProvidesDirectiveProcessor.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Mono.TextTemplating\CompiledTemplate.cs">
+      <Link>Mono.TextTemplating\CompiledTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Mono.TextTemplating\IExtendedTextTemplatingEngineHost.cs">
+      <Link>Mono.TextTemplating\IExtendedTextTemplatingEngineHost.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Mono.TextTemplating\ParsedTemplate.cs">
+      <Link>Mono.TextTemplating\ParsedTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Mono.TextTemplating\TemplateSettings.cs">
+      <Link>Mono.TextTemplating\TemplateSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Mono.TextTemplating\TemplatingEngine.cs">
+      <Link>Mono.TextTemplating\TemplatingEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\TextTemplating\Mono.TextTemplating\Mono.TextTemplating\Tokeniser.cs">
+      <Link>Mono.TextTemplating\Tokeniser.cs</Link>
+    </Compile>
     <Compile Include="Jar.cs" />
     <Compile Include="JavaCompiler.cs" />
+    <Compile Include="Mono.TextTemplating\EngineHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\CustomInfo.cs" />
     <Compile Include="ResolveJavaReferences.cs" />
+    <Compile Include="TemplateCompiler.cs" />
+    <Compile Include="Test\TemplateCompiler.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
