@@ -263,6 +263,18 @@ namespace Mono.TextTemplating
 				type.BaseTypes.Add (new CodeTypeReference (settings.Inherits));
 			else
 				type.BaseTypes.Add (new CodeTypeReference (typeof (TextTransformation)));
+			var defaultConstructor = new CodeConstructor ();
+			defaultConstructor.Attributes = MemberAttributes.Public;
+			defaultConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression(""));
+			type.Members.Add (defaultConstructor);
+			var parameterizedConstructor = new CodeConstructor ();
+			parameterizedConstructor.Attributes = MemberAttributes.Public;
+			var formatProviderParameter = 
+				new CodeParameterDeclarationExpression (typeof(IFormatProvider), "formatProvider");
+			parameterizedConstructor.Parameters.Add (formatProviderParameter);
+			parameterizedConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression("formatProvider"));
+			type.Members.Add(parameterizedConstructor);
+
 			namespac.Types.Add (type);
 			
 			//prep the transform method
