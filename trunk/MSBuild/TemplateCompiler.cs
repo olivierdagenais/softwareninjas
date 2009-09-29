@@ -103,8 +103,8 @@ namespace SoftwareNinjas.MSBuild
 
 			foreach (CompilerError err in host.Errors)
 			{
-				Log.LogError ("{0}({1},{2}): {3} {4}", err.FileName, err.Line, err.Column,
-				              err.IsWarning? "WARNING" : "ERROR", err.ErrorText);
+				Log.LogError ( "TemplateCompiler", err.ErrorNumber, null, err.FileName, 
+					err.Line, err.Column, 0, 0, err.ErrorText);
 			}
 			return !Log.HasLoggedErrors;
 		}
