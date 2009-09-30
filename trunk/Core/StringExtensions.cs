@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 
 namespace SoftwareNinjas.Core
 {
@@ -111,5 +113,28 @@ namespace SoftwareNinjas.Core
         {
             return String.Format(provider, format, args);
         }
+
+		/// <summary>
+		/// Enumerates the lines of text inside the string.
+		/// </summary>
+		/// 
+		/// <param name="input">
+		/// The string to process on a line-by-line basis.
+		/// </param>
+		/// 
+		/// <returns>
+		/// An enumeration of the lines contained in <paramref name="input"/>.
+		/// </returns>
+		public static IEnumerable<string> Lines(this string input)
+		{
+			using (var sr = new StringReader(input))
+			{
+				string line;
+				while (( line = sr.ReadLine() ) != null)
+				{
+					yield return line;
+				}
+			}
+		}
     }
 }

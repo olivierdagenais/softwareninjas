@@ -119,14 +119,36 @@ baz \#>
         #line hidden
         
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref=""GeneratedTextTransformation4f504ca0""/> class.
+        /// </summary>
         public GeneratedTextTransformation4f504ca0() : 
                 base() {
         }
         
+        /// <summary>
+        /// Initializes a new instance of the <see cref=""GeneratedTextTransformation4f504ca0""/> class
+        /// using the specified <paramref name=""formatProvider""/>
+        /// </summary>
         public GeneratedTextTransformation4f504ca0(System.IFormatProvider formatProvider) : 
                 base(formatProvider) {
         }
         
+        /// <summary>
+        /// Generates the text output of the transformation.
+        /// </summary>
+        /// 
+        /// <returns>
+        /// A string representing the generated text output of the text template transformation process.
+        /// </returns>
+        /// 
+        /// <remarks>
+        /// The text template transformation process has two steps. In the first step, the text template transformation
+        /// engine creates a class that is named the generated transformation class. In the second step, the engine
+        /// compiles and executes the generated transformation class, to produce the generated text output. The engine
+        /// calls <see cref=""TransformText""/> on the compiled generated transformation class to execute the text
+        /// template and generate the text output.
+        /// </remarks>
         public override string TransformText() {
             
             #line 2 """"

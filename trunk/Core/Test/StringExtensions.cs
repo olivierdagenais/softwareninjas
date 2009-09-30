@@ -67,5 +67,38 @@ namespace SoftwareNinjas.Core.Test
             Assert.AreEqual("3,5 argument was replaced",
                 "{0} argument was replaced".FormatProvider(FrCa, 3.5));
         }
+
+		/// <summary>
+		/// Tests <see cref="Core.StringExtensions.Lines(String)"/>
+		/// with an empty string.
+		/// </summary>
+		[Test]
+		public void Lines_Empty()
+		{
+			EnumerableExtensions.EnumerateSame(new string[] { }, String.Empty.Lines());
+		}
+
+		/// <summary>
+		/// Tests <see cref="Core.StringExtensions.Lines(String)"/>
+		/// with a string that's only one line.
+		/// </summary>
+		[Test]
+		public void Lines_OneLine()
+		{
+			EnumerableExtensions.EnumerateSame(new[] { str }, str.Lines());
+		}
+
+		/// <summary>
+		/// Tests <see cref="Core.StringExtensions.Lines(String)"/>
+		/// with a multi-line string.
+		/// </summary>
+		[Test]
+		public void Lines_Typical()
+		{
+			var expected = new [] { "one", "two", "three" };
+			EnumerableExtensions.EnumerateSame(expected, expected.Join("\r\n").Lines());
+			EnumerableExtensions.EnumerateSame(expected, expected.Join("\r").Lines());
+			EnumerableExtensions.EnumerateSame(expected, expected.Join("\n").Lines());
+		}
     }
 }
