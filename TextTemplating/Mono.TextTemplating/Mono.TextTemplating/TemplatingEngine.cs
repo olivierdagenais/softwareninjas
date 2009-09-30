@@ -242,6 +242,18 @@ namespace Mono.TextTemplating
 			}
 		}
 
+		internal static void AddCodeDocComment(CodeTypeMember dest, string comment)
+		{
+			using ( var sr = new StringReader(comment) )
+			{
+				string line;
+				while( (line = sr.ReadLine()) != null)
+				{
+					dest.Comments.Add(new CodeCommentStatement(line, true));
+				}
+			}
+		}
+
 		public static CodeCompileUnit GenerateCompileUnit (ITextTemplatingEngineHost host, ParsedTemplate pt,
 		                                                   TemplateSettings settings)
 		{
@@ -266,13 +278,20 @@ namespace Mono.TextTemplating
 			var defaultConstructor = new CodeConstructor ();
 			defaultConstructor.Attributes = MemberAttributes.Public;
 			defaultConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression(""));
-			type.Members.Add (defaultConstructor);
+			AddCodeDocComment(defaultConstructor, String.Format(@"<summary>
+Initializes a new instance of the <see cref=""{0}""/> class.
+</summary>", settings.Name));
+			type.Members.Add(defaultConstructor);
 			var parameterizedConstructor = new CodeConstructor ();
 			parameterizedConstructor.Attributes = MemberAttributes.Public;
 			var formatProviderParameter = 
 				new CodeParameterDeclarationExpression (typeof(IFormatProvider), "formatProvider");
 			parameterizedConstructor.Parameters.Add (formatProviderParameter);
 			parameterizedConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression("formatProvider"));
+			AddCodeDocComment(parameterizedConstructor, String.Format(@"<summary>
+Initializes a new instance of the <see cref=""{0}""/> class
+using the specified <paramref name=""formatProvider""/>
+</summary>", settings.Name));
 			type.Members.Add(parameterizedConstructor);
 
 			namespac.Types.Add (type);
@@ -283,6 +302,21 @@ namespace Mono.TextTemplating
 				ReturnType = new CodeTypeReference (typeof (String)),
 				Attributes = MemberAttributes.Public | MemberAttributes.Override
 			};
+			AddCodeDocComment(transformMeth, @"<summary>
+Generates the text output of the transformation.
+</summary>
+
+<returns>
+A string representing the generated text output of the text template transformation process.
+</returns>
+
+<remarks>
+The text template transformation process has two steps. In the first step, the text template transformation
+engine creates a class that is named the generated transformation class. In the second step, the engine
+compiles and executes the generated transformation class, to produce the generated text output. The engine
+calls <see cref=""TransformText""/> on the compiled generated transformation class to execute the text
+template and generate the text output.
+</remarks>");
 			
 			//method references that will need to be used multiple times
 			var writeMeth = new CodeMethodReferenceExpression (new CodeThisReferenceExpression (), "Write");
