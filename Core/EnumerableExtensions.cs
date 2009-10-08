@@ -143,6 +143,75 @@ namespace SoftwareNinjas.Core
         }
 
         /// <summary>
+        /// Applies <paramref name="each"/> to items of a sequence or calls <paramref name="else"/> if the sequence
+        /// was empty.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of the elements of <paramref name="source"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="source">
+        /// An <see cref="IEnumerable{T}"/> that contains the elements to enumerate.
+        /// </param>
+        /// 
+        /// <param name="each">
+        /// A function that will be called for each of the items in the sequence.  Return <see langword="false"/> to
+        /// stop the enumeration.
+        /// </param>
+        /// 
+        /// <param name="else">
+        /// An action that will be called if the sequence did not yield any items.
+        /// </param>
+        public static void ForElse<T> ( this IEnumerable<T> source, Func<T, bool> each, Action @else )
+        {
+            var e = source.GetEnumerator();
+            if (e.MoveNext())
+            {
+                if (!each(e.Current))
+                {
+                    return;
+                }
+                while (e.MoveNext())
+                {
+                    if (!each(e.Current))
+                    {
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                @else();
+            }
+        }
+
+        /// <summary>
+        /// Applies <paramref name="each"/> to items of a sequence or calls <paramref name="else"/> if the sequence
+        /// was empty.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of the elements of <paramref name="source"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="source">
+        /// An <see cref="IEnumerable{T}"/> that contains the elements to enumerate.
+        /// </param>
+        /// 
+        /// <param name="each">
+        /// An action that will be called for each of the items in the sequence.
+        /// </param>
+        /// 
+        /// <param name="else">
+        /// An action that will be called if the sequence did not yield any items.
+        /// </param>
+        public static void ForElse<T>(this IEnumerable<T> source, Action<T> each, Action @else)
+        {
+            ForElse ( source, item => { each(item); return true; }, @else );
+        }
+
+        /// <summary>
         /// Concatenates a specified separator <see cref="String"/> between each element of a specified
         /// <see cref="IEnumerable{T}"/> of <typeparamref name="T"/>, yielding a single concatenated string. 
         /// </summary>

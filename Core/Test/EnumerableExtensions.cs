@@ -105,6 +105,75 @@ namespace SoftwareNinjas.Core.Test
         }
 
         /// <summary>
+        /// Tests <see cref="Parent.EnumerableExtensions.ForElse{T}(IEnumerable{T},Action{T},Action)"/> with
+        /// the case there the <see cref="IEnumerable{T}"/> yields only one item.
+        /// </summary>
+        [Test]
+        public void ForElse_HasOneItem()
+        {
+            var dest = new List<string>();
+            var input = new[] { "1" };
+            input.ForElse(
+                i => dest.Add(i),
+                () => Assert.Fail("The 'else' should not be called")
+            );
+            EnumerateSame(input, dest);
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.EnumerableExtensions.ForElse{T}(IEnumerable{T},Action{T},Action)"/> with
+        /// the typical case.
+        /// </summary>
+        [Test]
+        public void ForElse_HasItems()
+        {
+            var dest = new List<string>();
+            var input = new[] { "1", "2", "3" };
+            input.ForElse(
+                i => dest.Add(i),
+                () => Assert.Fail("The 'else' should not be called")
+            );
+            EnumerateSame(input, dest);
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.EnumerableExtensions.ForElse{T}(IEnumerable{T},Func{T,bool},Action)"/> with
+        /// the delegate returning <see langword="false"/>, which should end the enumeration right then and there.
+        /// </summary>
+        [Test]
+        public void ForElse_StopAfterOne()
+        {
+            var dest = new List<string>();
+            var input = new[] { "1", "2", "3" };
+            input.ForElse(
+                i =>
+                {
+                    dest.Add(i);
+                    return false;
+                },
+                () => Assert.Fail("The 'else' should not be called")
+            );
+            Assert.AreEqual(1, dest.Count);
+            Assert.AreEqual(input[0], dest[0]);
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.EnumerableExtensions.ForElse{T}(IEnumerable{T},Action{T},Action)"/> with
+        /// the exceptional case where the <see cref="IEnumerable{T}"/> did not yield any items.
+        /// </summary>
+        [Test]
+        public void ForElse_HasNoItems()
+        {
+            var input = new string[] { };
+            var elseCalled = 0;
+            input.ForElse(
+                i => Assert.Fail("The 'each' should not be called"),
+                () => elseCalled++
+            );
+            Assert.AreEqual(1, elseCalled);
+        }
+
+        /// <summary>
         /// Tests <see cref="Parent.EnumerableExtensions.Join{T}(IEnumerable{T},String)"/>.
         /// </summary>
         [Test]
