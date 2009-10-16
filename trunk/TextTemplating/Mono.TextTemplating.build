@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<project name="Mono.TextTemplating" default="test"
+    xmlns="http://softwareninjas.googlecode.com/schemas/nant.xsd"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://softwareninjas.googlecode.com/schemas/nant.xsd ../Tools/NAnt.xsd">
+
+    <loadtasks assembly="../Tools/nantcontrib/bin/NAnt.Contrib.Tasks.dll" />
+
+    <property name="configuration" value="Debug" overwrite="false" />
+    <property name="projects" value="Mono.TextTemplating,Mono.TextTemplating.Tests,TextTransform" />
+
+    <target name="clean">
+        <foreach item="String" in="${projects}" delim="," property="project">
+            <foreach item="String" in="obj,bin" delim="," property="dir">
+                <delete dir="${project}/${dir}/${configuration}"
+                        if="${directory::exists(project + '/' + dir + '/' + configuration)}"
+                        failonerror="false" />
+            </foreach>
+        </foreach>
+    </target>
+
+    <target name="compile" depends="clean">
+        <msbuild project="Mono.TextTemplating.sln">
+            <arg value="/property:Configuration=${configuration}" />
+            <arg value="/verbosity:minimal" />
+        </msbuild>
+    </target>
+
+    <target name="test" depends="compile">
+        <nunit2>
+            <formatter type="Plain" />
+            <test>
+                <assemblies>
+                    <include name="Mono.TextTemplating.Tests/bin/${configuration}/Mono.TextTemplating.Tests.dll" />
+                </assemblies>
+            </test>
+        </nunit2>
+    </target>
+
+    <target name="release">
+        <property name="configuration" value="release" />
+        <call target="test" />
+    </target>
+</project>
