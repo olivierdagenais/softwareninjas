@@ -274,25 +274,32 @@ namespace Mono.TextTemplating
 			if (!String.IsNullOrEmpty (settings.Inherits))
 				type.BaseTypes.Add (new CodeTypeReference (settings.Inherits));
 			else
+			{
 				type.BaseTypes.Add (new CodeTypeReference (typeof (TextTransformation)));
-			var defaultConstructor = new CodeConstructor ();
-			defaultConstructor.Attributes = MemberAttributes.Public;
-			defaultConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression(""));
-			AddCodeDocComment(defaultConstructor, String.Format(@"<summary>
+				var defaultConstructor = new CodeConstructor ();
+				defaultConstructor.Attributes = MemberAttributes.Public;
+				defaultConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression(""));
+				AddCodeDocComment(defaultConstructor, String.Format(@"<summary>
 Initializes a new instance of the <see cref=""{0}""/> class.
 </summary>", settings.Name));
-			type.Members.Add(defaultConstructor);
-			var parameterizedConstructor = new CodeConstructor ();
-			parameterizedConstructor.Attributes = MemberAttributes.Public;
-			var formatProviderParameter = 
-				new CodeParameterDeclarationExpression (typeof(IFormatProvider), "formatProvider");
-			parameterizedConstructor.Parameters.Add (formatProviderParameter);
-			parameterizedConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression("formatProvider"));
-			AddCodeDocComment(parameterizedConstructor, String.Format(@"<summary>
+				type.Members.Add(defaultConstructor);
+				var parameterizedConstructor = new CodeConstructor ();
+				parameterizedConstructor.Attributes = MemberAttributes.Public;
+				var formatProviderParameter = 
+					new CodeParameterDeclarationExpression (typeof(IFormatProvider), "formatProvider");
+				parameterizedConstructor.Parameters.Add (formatProviderParameter);
+				parameterizedConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression("formatProvider"));
+				AddCodeDocComment(parameterizedConstructor, String.Format(@"<summary>
 Initializes a new instance of the <see cref=""{0}""/> class
 using the specified <paramref name=""formatProvider""/>
-</summary>", settings.Name));
-			type.Members.Add(parameterizedConstructor);
+</summary>
+
+<param name=""formatProvider"">
+The <see cref=""IFormatProvider""/> to use when converting <see cref=""Object""/> instances to
+<see cref=""String""/> instances.
+</param>", settings.Name));
+				type.Members.Add(parameterizedConstructor);
+			}
 
 			namespac.Types.Add (type);
 			

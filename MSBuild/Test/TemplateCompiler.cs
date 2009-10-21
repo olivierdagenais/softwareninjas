@@ -130,6 +130,11 @@ baz \#>
         /// Initializes a new instance of the <see cref=""GeneratedTextTransformation4f504ca0""/> class
         /// using the specified <paramref name=""formatProvider""/>
         /// </summary>
+        /// 
+        /// <param name=""formatProvider"">
+        /// The <see cref=""IFormatProvider""/> to use when converting <see cref=""Object""/> instances to
+        /// <see cref=""String""/> instances.
+        /// </param>
         public GeneratedTextTransformation4f504ca0(System.IFormatProvider formatProvider) : 
                 base(formatProvider) {
         }
