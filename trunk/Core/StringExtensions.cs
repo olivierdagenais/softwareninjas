@@ -136,5 +136,36 @@ namespace SoftwareNinjas.Core
                 }
             }
         }
+
+        /// <summary>
+        /// Combines all the path fragments together.
+        /// </summary>
+        /// 
+        /// <param name="input">
+        /// The first fragment.
+        /// </param>
+        /// 
+        /// <param name="pathFragments">
+        /// The subsequent fragment(s).
+        /// </param>
+        /// 
+        /// <returns>
+        /// All fragments assembled - with the appropriate separator - into a single <see cref="String"/>.
+        /// </returns>
+        /// 
+        /// <remarks>
+        /// This is equivalent to cascading calls to <see cref="Path.Combine(String, String)"/>.
+        /// </remarks>
+        /// 
+        /// <seealso cref="Path.Combine(String, String)"/>
+        public static string CombinePath (this string input, params string[] pathFragments)
+        {
+            var result = input;
+            foreach (var fragment in pathFragments)
+            {
+                result = Path.Combine (result, fragment);
+            }
+            return result;
+        }
     }
 }

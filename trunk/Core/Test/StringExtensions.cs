@@ -3,6 +3,7 @@ using System.Globalization;
 
 using Parent = SoftwareNinjas.Core;
 using NUnit.Framework;
+using System.IO;
 
 namespace SoftwareNinjas.Core.Test
 {
@@ -100,5 +101,40 @@ namespace SoftwareNinjas.Core.Test
 			EnumerableExtensions.EnumerateSame(expected, expected.Join("\r").Lines());
 			EnumerableExtensions.EnumerateSame(expected, expected.Join("\n").Lines());
 		}
+
+        /// <summary>
+        /// Tests <see cref="Parent.StringExtensions.CombinePath(String,String[])"/>
+        /// with zero additional path fragments.
+        /// </summary>
+        [Test]
+        public void CombinePath_ZeroArguments ()
+        {
+            var actual = Parent.StringExtensions.CombinePath ("one");
+            Assert.AreEqual ("one", actual);
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.StringExtensions.CombinePath(String,String[])"/>
+        /// with a single path fragment to add.
+        /// </summary>
+        [Test]
+        public void CombinePath_OneArgument ()
+        {
+            var expected = Path.Combine ("one", "two");
+            var actual = Parent.StringExtensions.CombinePath ("one", "two");
+            Assert.AreEqual (expected, actual);
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.StringExtensions.CombinePath(String,String[])"/>
+        /// by adding two path fragments.
+        /// </summary>
+        [Test]
+        public void CombinePath_TwoArguments ()
+        {
+            var expected = Path.Combine (Path.Combine ("one", "two"), "three");
+            var actual = Parent.StringExtensions.CombinePath ("one", "two", "three");
+            Assert.AreEqual (expected, actual);
+        }
     }
 }
