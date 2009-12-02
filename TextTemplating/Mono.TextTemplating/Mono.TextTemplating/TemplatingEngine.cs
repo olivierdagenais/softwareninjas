@@ -274,33 +274,7 @@ namespace Mono.TextTemplating
 			if (!String.IsNullOrEmpty (settings.Inherits))
 				type.BaseTypes.Add (new CodeTypeReference (settings.Inherits));
 			else
-			{
 				type.BaseTypes.Add (new CodeTypeReference (typeof (TextTransformation)));
-				var defaultConstructor = new CodeConstructor ();
-				defaultConstructor.Attributes = MemberAttributes.Public;
-				defaultConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression(""));
-				AddCodeDocComment(defaultConstructor, String.Format(@"<summary>
-Initializes a new instance of the <see cref=""{0}""/> class.
-</summary>", settings.Name));
-				type.Members.Add(defaultConstructor);
-				var parameterizedConstructor = new CodeConstructor ();
-				parameterizedConstructor.Attributes = MemberAttributes.Public;
-				var formatProviderParameter = 
-					new CodeParameterDeclarationExpression (typeof(IFormatProvider), "formatProvider");
-				parameterizedConstructor.Parameters.Add (formatProviderParameter);
-				parameterizedConstructor.BaseConstructorArgs.Add(new CodeSnippetExpression("formatProvider"));
-				AddCodeDocComment(parameterizedConstructor, String.Format(@"<summary>
-Initializes a new instance of the <see cref=""{0}""/> class
-using the specified <paramref name=""formatProvider""/>
-</summary>
-
-<param name=""formatProvider"">
-The <see cref=""IFormatProvider""/> to use when converting <see cref=""Object""/> instances to
-<see cref=""String""/> instances.
-</param>", settings.Name));
-				type.Members.Add(parameterizedConstructor);
-			}
-
 			namespac.Types.Add (type);
 			
 			//prep the transform method
@@ -408,14 +382,10 @@ template and generate the text output.
 
 			IExtendedTextTemplatingEngineHost extendedHost = host as IExtendedTextTemplatingEngineHost;
 			if (extendedHost != null) {
-				// TODO: figure out the culture situation with this version
 				tt = extendedHost.CreateInstance (transformType);
 			}
 			else {
-				if (culture != null)
-					tt = (TextTransformation) Activator.CreateInstance (transformType, culture);
-				else
-					tt = (TextTransformation) Activator.CreateInstance (transformType);
+				tt = (TextTransformation) Activator.CreateInstance(transformType);
 			}
 			
 			//set the host property if it exists
@@ -423,7 +393,10 @@ template and generate the text output.
 			if (hostProp != null && hostProp.CanWrite)
 				hostProp.SetValue (tt, host, null);
 			
-			
+			//set the culture
+			if (culture != null)
+				tt.FormatProvider = culture;
+
 			tt.Initialize ();
 			string output = tt.TransformText ();
 			host.LogErrors (tt.Errors);

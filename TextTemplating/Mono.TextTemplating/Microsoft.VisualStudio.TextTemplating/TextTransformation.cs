@@ -58,29 +58,30 @@ namespace Microsoft.VisualStudio.TextTemplating
 		string currentIndent = "";
 		CompilerErrorCollection errors = new CompilerErrorCollection ();
 		StringBuilder builder = new StringBuilder ();
-		readonly IFormatProvider formatProvider;
-		readonly object[] formatProviderAsParameterArray;
+		readonly object[] formatProviderAsParameterArray = new object[1];
 		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TextTransformation"/> class.
 		/// </summary>
-		public TextTransformation () : this (CultureInfo.InvariantCulture)
+		public TextTransformation ()
 		{
+			FormatProvider = CultureInfo.InvariantCulture;
 		}
 		
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TextTransformation"/> class with the specified
-		/// <paramref name="formatProvider"/>.
+		/// Gets or sets the culture-specific formatting information that is used when calling
+		/// <see cref="ToStringWithCulture(Object)"/>.
 		/// </summary>
-		/// 
-		/// <param name="formatProvider">
-		/// The <see cref="IFormatProvider"/> to use when converting <see cref="Object"/> instances to
-		/// <see cref="String"/> instances.
-		/// </param>
-		public TextTransformation (IFormatProvider formatProvider)
+		public IFormatProvider FormatProvider
 		{
-			this.formatProvider = formatProvider;
-			this.formatProviderAsParameterArray = new object[] { formatProvider };
+			get
+			{
+				return (IFormatProvider) formatProviderAsParameterArray[0];
+			}
+			set
+			{
+				formatProviderAsParameterArray[0] = value;
+			}
 		}
 
 		/// <summary>
@@ -277,7 +278,7 @@ namespace Microsoft.VisualStudio.TextTemplating
 
 			IConvertible conv = objectToConvert as IConvertible;
 			if (conv != null)
-				return conv.ToString(formatProvider);
+				return conv.ToString(FormatProvider);
 
 			MethodInfo mi = objectToConvert.GetType ().GetMethod ("ToString", new Type[] { typeof (IFormatProvider) });
 			if (mi != null && mi.ReturnType == typeof (String))
