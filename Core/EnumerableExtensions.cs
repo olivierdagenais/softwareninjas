@@ -143,6 +143,32 @@ namespace SoftwareNinjas.Core
         }
 
         /// <summary>
+        /// Returns the first element of a sequence, or a default value if the sequence contains no elements.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of the elements of <paramref name="source"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="source">
+        /// The <see cref="IEnumerable{T}"/> to return the first element of.
+        /// </param>
+        /// 
+        /// <returns>
+        /// <b>default</b>(<typeparamref name="T"/>) if <paramref name="source"/> is empty; otherwise, the first element
+        /// in <paramref name="source"/>.
+        /// </returns>
+        public static T FirstOrDefault<T>(this IEnumerable<T> source)
+        {
+            var e = source.GetEnumerator();
+            if (e.MoveNext())
+            {
+                return e.Current;
+            }
+            return default(T);
+        }
+
+        /// <summary>
         /// Applies <paramref name="each"/> to items of a sequence or calls <paramref name="else"/> if the sequence
         /// was empty.
         /// </summary>
