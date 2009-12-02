@@ -105,6 +105,28 @@ namespace SoftwareNinjas.Core.Test
         }
 
         /// <summary>
+        /// Tests the <see cref="Parent.EnumerableExtensions.FirstOrDefault{T}(IEnumerable{T})" /> method with
+        /// empty sequences.
+        /// </summary>
+        [Test]
+        public void FirstOrDefault_EmptySequence()
+        {
+            Assert.AreEqual(0, Parent.EnumerableExtensions.FirstOrDefault(new int[] { }));
+            Assert.AreEqual(null, Parent.EnumerableExtensions.FirstOrDefault(new string[] { }));
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.EnumerableExtensions.FirstOrDefault{T}(IEnumerable{T})" /> method with
+        /// sequences that contain one item.
+        /// </summary>
+        [Test]
+        public void FirstOrDefault_SequenceWithOneItem()
+        {
+            Assert.AreEqual(42, Parent.EnumerableExtensions.FirstOrDefault(new int[] { 42 }));
+            Assert.AreEqual("chicken", Parent.EnumerableExtensions.FirstOrDefault(new string[] { "chicken" }));
+        }
+
+        /// <summary>
         /// Tests <see cref="Parent.EnumerableExtensions.ForElse{T}(IEnumerable{T},Action{T},Action)"/> with
         /// the case there the <see cref="IEnumerable{T}"/> yields only one item.
         /// </summary>
