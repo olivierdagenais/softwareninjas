@@ -66,6 +66,8 @@
     <Compile Include="Test\EnumerableExtensions.cs" />
     <Compile Include="Test\EnumExtensions.cs" />
     <Compile Include="Test\StringExtensions.cs" />
+    <Compile Include="Test\TreeExtensions.cs" />
+    <Compile Include="TreeExtensions.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
