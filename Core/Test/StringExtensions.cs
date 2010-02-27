@@ -13,8 +13,8 @@ namespace SoftwareNinjas.Core.Test
     [TestFixture]
     public class StringExtensions
     {
-        private const string str = "No formatting necessary";
-        private readonly CultureInfo FrCa = CultureInfo.CreateSpecificCulture("fr-ca");
+        private const string Str = "No formatting necessary";
+        private static readonly CultureInfo FrCa = CultureInfo.CreateSpecificCulture("fr-ca");
 
         /// <summary>
         /// Tests <see cref="Parent.StringExtensions.FormatInvariant(String,Object[])"/>
@@ -23,7 +23,7 @@ namespace SoftwareNinjas.Core.Test
         [Test]
         public void FormatInvariant_NoArgs()
         {
-            Assert.AreEqual(str, str.FormatInvariant());
+            Assert.AreEqual(Str, Str.FormatInvariant());
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace SoftwareNinjas.Core.Test
         [Test]
         public void FormatProvider_NoArgs()
         {
-            Assert.AreEqual(str, str.FormatProvider(FrCa));
+            Assert.AreEqual(Str, Str.FormatProvider(FrCa));
         }
 
         /// <summary>
@@ -67,6 +67,36 @@ namespace SoftwareNinjas.Core.Test
         {
             Assert.AreEqual("3,5 argument was replaced",
                 "{0} argument was replaced".FormatProvider(FrCa, 3.5));
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.StringExtensions.InsertLines(String, String, int)" /> method with
+        /// the typical case.
+        /// </summary>
+        [Test]
+        public void Insert_Typical()
+        {
+            var source = @"1
+2
+3
+4
+5
+6";
+            var inserted = @"5.1
+5.2
+5.3";
+
+            var expected = @"1
+2
+3
+4
+5
+5.1
+5.2
+5.3
+6";
+            var actual = Parent.StringExtensions.InsertLines(source, inserted, 6);
+            Assert.AreEqual(expected, actual);
         }
 
 		/// <summary>
@@ -86,7 +116,7 @@ namespace SoftwareNinjas.Core.Test
 		[Test]
 		public void Lines_OneLine()
 		{
-			EnumerableExtensions.EnumerateSame(new[] { str }, str.Lines());
+			EnumerableExtensions.EnumerateSame(new[] { Str }, Str.Lines());
 		}
 
 		/// <summary>

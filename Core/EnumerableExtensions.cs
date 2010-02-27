@@ -238,6 +238,58 @@ namespace SoftwareNinjas.Core
         }
 
         /// <summary>
+        /// Combines two sequences such that the <paramref name="insertedItems"/> will appear before the
+        /// <paramref name="items"/> at the provided <paramref name="insertionIndex"/>, followed by the rest of the
+        /// <paramref name="items"/>.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of <paramref name="items"/> and <paramref name="insertedItems"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="items">
+        /// The sequence in which to insert <paramref name="insertedItems"/>.
+        /// </param>
+        /// 
+        /// <param name="insertedItems">
+        /// The sequence to insert into <paramref name="items"/>.
+        /// </param>
+        /// 
+        /// <param name="insertionIndex">
+        /// The index of the item in <paramref name="items"/> before which <paramref name="insertedItems"/> will be
+        /// inserted.
+        /// </param>
+        /// 
+        /// <returns>
+        /// A sequence representing the insertion of <paramref name="insertedItems"/> into <paramref name="items"/>
+        /// at the specified <paramref name="insertionIndex"/>.
+        /// </returns>
+        public static IEnumerable<T> Insert<T>(this IEnumerable<T> items, IEnumerable<T> insertedItems,
+            int insertionIndex)
+        {
+            var index = 0;
+            foreach (var item in items)
+            {
+                if (index == insertionIndex)
+                {
+                    foreach (var insertedItem in insertedItems)
+                    {
+                        yield return insertedItem;
+                    }
+                }
+                yield return item;
+                index++;
+            }
+            if (index == insertionIndex)
+            {
+                foreach (var insertedItem in insertedItems)
+                {
+                    yield return insertedItem;
+                }
+            }
+        }
+
+        /// <summary>
         /// Concatenates a specified separator <see cref="String"/> between each element of a specified
         /// <see cref="IEnumerable{T}"/> of <typeparamref name="T"/>, yielding a single concatenated string. 
         /// </summary>
@@ -375,10 +427,7 @@ namespace SoftwareNinjas.Core
                 {
                     return '"' + s + '"';
                 }
-                else
-                {
-                    return s;
-                }
+                return s;
             };
             return Join(values, " ", stringifier);
         }

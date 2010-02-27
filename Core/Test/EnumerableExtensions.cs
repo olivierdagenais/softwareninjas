@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 using NUnit.Framework;
 using Parent = SoftwareNinjas.Core;
@@ -67,7 +66,7 @@ namespace SoftwareNinjas.Core.Test
         /// </param>
         public static void EnumerateSame<T>(IEnumerable<T> expected, IEnumerable<T> actual)
         {
-            EnumerateSame(expected, actual, (t) => t);
+            EnumerateSame(expected, actual, t => t);
         }
 
         /// <summary>
@@ -193,6 +192,87 @@ namespace SoftwareNinjas.Core.Test
                 () => elseCalled++
             );
             Assert.AreEqual(1, elseCalled);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.EnumerableExtensions.Insert{T}(IEnumerable{T},IEnumerable{T},int)" /> method
+        /// with the typical case.
+        /// </summary>
+        [Test]
+        public void Insert_Typical()
+        {
+            var items = new[] { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
+            var insertedItems = new[] { 4.1, 4.2, 4.3 };
+            var expected = new[] { 0.0, 1.0, 2.0, 3.0, 4.0, 4.1, 4.2, 4.3, 5.0 };
+
+            var actual = Parent.EnumerableExtensions.Insert(items, insertedItems, 5);
+
+            EnumerateSame(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.EnumerableExtensions.Insert{T}(IEnumerable{T},IEnumerable{T},int)" /> method
+        /// with the typical case, this time using multi-line strings.
+        /// </summary>
+        [Test]
+        public void Insert_TypicalWithMultiLineStrings()
+        {
+            var items = @"0
+1
+2
+3
+4
+5";
+            var insertedItems = @"4.1
+4.2
+4.3";
+
+            var expected = @"0
+1
+2
+3
+4
+4.1
+4.2
+4.3
+5";
+
+            var actual = Parent.EnumerableExtensions.Insert(items.Lines(), insertedItems.Lines(), 5);
+
+            EnumerateSame(expected.Lines(), actual);
+        }
+        /// <summary>
+        /// Tests the <see cref="Parent.EnumerableExtensions.Insert{T}(IEnumerable{T},IEnumerable{T},int)" /> method
+        /// with the edge case of the inserted items going before all the items, like calling
+        /// <see cref="Parent.EnumerableExtensions.Compose{T}(IEnumerable{T},IEnumerable{T})"/>.
+        /// </summary>
+        [Test]
+        public void Insert_AtTheBeginning()
+        {
+            var items = new[] { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
+            var insertedItems = new[] { -1.1, -1.2, -1.3 };
+            var expected = new[] { -1.1, -1.2, -1.3, 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
+
+            var actual = Parent.EnumerableExtensions.Insert(items, insertedItems, 0);
+
+            EnumerateSame(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.EnumerableExtensions.Insert{T}(IEnumerable{T},IEnumerable{T},int)" /> method
+        /// with the edge case of the inserted items going after all the items, like calling
+        /// <see cref="Parent.EnumerableExtensions.Compose{T}(IEnumerable{T},IEnumerable{T})"/>.
+        /// </summary>
+        [Test]
+        public void Insert_AtTheEnd()
+        {
+            var items = new[] { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0 };
+            var insertedItems = new[] { 5.1, 5.2, 5.3 };
+            var expected = new[] { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 5.1, 5.2, 5.3 };
+
+            var actual = Parent.EnumerableExtensions.Insert(items, insertedItems, 6);
+
+            EnumerateSame(expected, actual);
         }
 
         /// <summary>
