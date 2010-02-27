@@ -80,7 +80,9 @@ namespace SoftwareNinjas.Core
         /// </returns>
         /// 
         /// <seealso cref="String.Format(IFormatProvider, String, Object[])"/>
+        // ReSharper disable InconsistentNaming
         public static string FormatCurrentUICulture(this string format, params object[] args)
+        // ReSharper restore InconsistentNaming
         {
             return String.Format(CultureInfo.CurrentUICulture, format, args);
         }
@@ -112,6 +114,41 @@ namespace SoftwareNinjas.Core
         public static string FormatProvider(this string format, IFormatProvider provider, params object[] args)
         {
             return String.Format(provider, format, args);
+        }
+
+        /// <summary>
+        /// Merges two strings such that the lines of <paramref name="input"/> before
+        /// <paramref name="insertionLineNumber"/> will appear before the lines of <paramref name="inserted"/> and
+        /// finally the remaining lines of <paramref name="input"/> will be appear.
+        /// </summary>
+        /// 
+        /// <param name="input">
+        /// The <see cref="String"/> in which to insert <paramref name="inserted"/>.
+        /// </param>
+        /// 
+        /// <param name="inserted">
+        /// The <see cref="String"/> to insert inside <paramref name="input"/>.
+        /// </param>
+        /// 
+        /// <param name="insertionLineNumber">
+        /// The (one-based) line number at which to insert <paramref name="inserted"/> into <paramref name="input"/>.
+        /// </param>
+        /// 
+        /// <returns>
+        /// A <see cref="String"/> representing the insertion of <paramref name="inserted"/> at the specified
+        /// <paramref name="insertionLineNumber"/> inside of <paramref name="input"/>.
+        /// </returns>
+        /// 
+        /// <remarks>
+        /// This is a special case of <see cref="EnumerableExtensions.Insert{T}(IEnumerable{T}, IEnumerable{T}, int)"/>.
+        /// </remarks>
+        public static string InsertLines(this string input, string inserted, int insertionLineNumber)
+        {
+            var inputLines = input.Lines();
+            var insertedLines = inserted.Lines();
+            var mergedLines = inputLines.Insert(insertedLines, insertionLineNumber - 1);
+            var result = mergedLines.Join(Environment.NewLine);
+            return result;
         }
 
         /// <summary>
