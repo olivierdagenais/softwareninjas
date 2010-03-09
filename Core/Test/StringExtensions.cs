@@ -17,6 +17,32 @@ namespace SoftwareNinjas.Core.Test
         private static readonly CultureInfo FrCa = CultureInfo.CreateSpecificCulture("fr-ca");
 
         /// <summary>
+        /// Tests the <see cref="Parent.StringExtensions.Contains(String,String,StringComparison)" /> method with
+        /// a few simple scenarios.
+        /// </summary>
+        [Test]
+        public void Contains_SimpleScenarios()
+        {
+            Assert.IsTrue(Parent.StringExtensions.Contains(Str, Str, StringComparison.InvariantCulture));
+            Assert.IsTrue(Parent.StringExtensions.Contains("one", "o", StringComparison.InvariantCulture));
+            Assert.IsTrue(Parent.StringExtensions.Contains("one", "n", StringComparison.InvariantCulture));
+            Assert.IsTrue(Parent.StringExtensions.Contains("one", "e", StringComparison.InvariantCulture));
+            Assert.IsTrue(Parent.StringExtensions.Contains("OnE", "oNe", StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(Parent.StringExtensions.Contains("One", "O", StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(Parent.StringExtensions.Contains("One", "n", StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(Parent.StringExtensions.Contains("One", "e", StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(Parent.StringExtensions.Contains("One", "o", StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(Parent.StringExtensions.Contains("One", "N", StringComparison.InvariantCultureIgnoreCase));
+            Assert.IsTrue(Parent.StringExtensions.Contains("OnE", "e", StringComparison.InvariantCultureIgnoreCase));
+
+            Assert.IsFalse(Parent.StringExtensions.Contains("OnE", "oNe", StringComparison.InvariantCulture));
+            Assert.IsFalse(Parent.StringExtensions.Contains("OnE", "o", StringComparison.InvariantCulture));
+            Assert.IsFalse(Parent.StringExtensions.Contains("One", "a", StringComparison.InvariantCulture));
+            Assert.IsFalse(Parent.StringExtensions.Contains("One", "a", StringComparison.InvariantCultureIgnoreCase));
+        }
+
+
+        /// <summary>
         /// Tests <see cref="Parent.StringExtensions.FormatInvariant(String,Object[])"/>
         /// with no arguments.
         /// </summary>
