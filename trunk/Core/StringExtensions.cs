@@ -11,6 +11,39 @@ namespace SoftwareNinjas.Core
     public static class StringExtensions
     {
         /// <summary>
+        /// Returns a value indicating whether the specified <see cref="String"/> object occurs within this string. 
+        /// </summary>
+        /// 
+        /// <param name="s">
+        /// The <see cref="String"/> in which to search.
+        /// </param>
+        /// 
+        /// <param name="value">
+        /// The <see cref="String"/> object to seek.
+        /// </param>
+        /// 
+        /// <param name="comparisonType">
+        /// One of the <see cref="StringComparison"/> values.
+        /// </param>
+        /// 
+        /// <returns>
+        /// <see langword="true"/> if the <paramref name="value"/> parameter occurs within this string,
+        /// or if <paramref name="value"/> is the empty string (""); otherwise, <see langword="false"/>.
+        /// </returns>
+        /// 
+        /// <exception cref="ArgumentNullException">
+        /// <paramref name="value"/> is <see langword="null"/>.
+        /// </exception>
+        /// 
+        /// <exception cref="ArgumentException">
+        /// <paramref name="comparisonType"/> is not a valid <see cref="StringComparison"/> value.
+        /// </exception>
+        public static bool Contains(this string s, string value, StringComparison comparisonType)
+        {
+            return s.IndexOf(value, comparisonType) != -1;
+        }
+
+        /// <summary>
         /// Replaces the format item in a specified <see cref="String"/> with the text equivalent of the value of a
         /// corresponding <see cref="Object"/> instance in a specified array, using the
         /// <see cref="CultureInfo.InvariantCulture"/> for formatting.
