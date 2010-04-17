@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -66,12 +64,15 @@ namespace SoftwareNinjas.NAnt.Tasks
             var references = new List<FileInfo>();
             var referenceHintPathNodes =
                 doc.SelectNodes("msbuild:Project/msbuild:ItemGroup/msbuild:Reference/msbuild:HintPath", manager);
-            foreach (XmlNode referenceHintPathNode in referenceHintPathNodes)
+            if (referenceHintPathNodes != null)
             {
-                var hintPath = referenceHintPathNode.InnerText;
-                var resolvedPath = Path.Combine(baseProjectPath, hintPath);
-                var reference = new FileInfo(resolvedPath);
-                references.Add(reference);
+                foreach (XmlNode referenceHintPathNode in referenceHintPathNodes)
+                {
+                    var hintPath = referenceHintPathNode.InnerText;
+                    var resolvedPath = Path.Combine(baseProjectPath, hintPath);
+                    var reference = new FileInfo(resolvedPath);
+                    references.Add(reference);
+                }
             }
             return references;
         }

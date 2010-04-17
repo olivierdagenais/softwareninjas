@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Parent = SoftwareNinjas.NAnt.Tasks;
 
 namespace SoftwareNinjas.NAnt.Tasks.Test

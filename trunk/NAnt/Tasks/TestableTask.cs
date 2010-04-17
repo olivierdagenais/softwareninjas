@@ -1,6 +1,4 @@
-﻿using System;
-
-using NAnt.Core;
+﻿using NAnt.Core;
 
 namespace SoftwareNinjas.NAnt.Tasks
 {
@@ -18,7 +16,7 @@ namespace SoftwareNinjas.NAnt.Tasks
         /// <param name="logging">
         /// Whether logging is enabled or not.
         /// </param>
-        public TestableTask(bool logging)
+        protected TestableTask(bool logging)
         {
             _logging = logging;
         }

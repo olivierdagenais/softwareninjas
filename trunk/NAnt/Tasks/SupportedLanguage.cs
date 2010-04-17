@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SoftwareNinjas.NAnt.Tasks
+﻿namespace SoftwareNinjas.NAnt.Tasks
 {
     /// <summary>
     /// The programming languages that are supported for projects.

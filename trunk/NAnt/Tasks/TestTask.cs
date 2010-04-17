@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Text;
-
 using NAnt.Core;
 using NAnt.Core.Attributes;
 using NAnt.NUnit.Types;
@@ -92,7 +89,7 @@ namespace SoftwareNinjas.NAnt.Tasks
                 }
                 else
                 {
-                    hasErrors |= TestWithNUnit(project, outputFilePath);
+                    hasErrors |= TestWithNUnit(outputFilePath);
                 }
             }
             if (hasErrors)
@@ -101,14 +98,14 @@ namespace SoftwareNinjas.NAnt.Tasks
             }
         }
 
-        private bool TestWithNUnit(Project project, string outputFilePath)
+        private bool TestWithNUnit(string outputFilePath)
         {
             bool hasErrors = false;
             #region <nunit2>
             var task = new NUnit2Task();
             // this little assignment makes the whole TestTask very difficult to unit test
             // unless maybe we subclass Project for testing?
-            task.Project = this.Project;
+            task.Project = Project;
 
             #region <formatter type="Plain" />
             var formatter = new FormatterElement();
@@ -158,14 +155,14 @@ namespace SoftwareNinjas.NAnt.Tasks
             var arguments = new string[]
             {
                 "-classpath",
-                requiredJars.Join(";", (item) => item.FullName),
+                requiredJars.Join(";", item => item.FullName),
                 "org.junit.runner.JUnitCore"
             }.Compose(testClasses);
             using (ICapturedProcess process = _capturedProcessFactory.Create(
                 pathToJava,
-                arguments.Map((str) => (object) str) /* For some reason, IEnumerable<string> is not acceptable */,
-                (line) => Log(Level.Info, line),
-                (line) => Log(Level.Error, line)))
+                arguments.Map(str => (object) str) /* For some reason, IEnumerable<string> is not acceptable */,
+                line => Log(Level.Info, line),
+                line => Log(Level.Error, line)))
             {
                 exitCode = process.Run();
             }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
 using NAnt.Core;
 using NAnt.Core.Attributes;
@@ -36,7 +34,7 @@ namespace SoftwareNinjas.NAnt.Tasks
     [TaskName("clean")]
     public class CleanTask : AbstractProjectTask
     {
-        private static readonly string[] directoriesToClean = { "obj", "bin" };
+        private static readonly string[] DirectoriesToClean = { "obj", "bin" };
 
         /// <summary>
         /// Default constructor for NAnt itself.
@@ -76,7 +74,7 @@ namespace SoftwareNinjas.NAnt.Tasks
             {
                 Log(Level.Info, "Cleaning {0}...", project);
                 var projectDir = Path.Combine(BaseDirectory.FullName, project);
-                foreach (string dirName in directoriesToClean)
+                foreach (string dirName in DirectoriesToClean)
                 {
                     var subDir = Path.Combine(projectDir, dirName);
                     if (Configuration != null)
