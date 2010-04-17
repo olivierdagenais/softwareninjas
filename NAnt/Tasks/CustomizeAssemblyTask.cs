@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
@@ -43,9 +40,9 @@ namespace SoftwareNinjas.NAnt.Tasks
     [TaskName("customizeAssembly")]
     public class CustomizeAssemblyTask : AbstractProjectTask
     {
-        private const string BUILD_NUMBER = "BUILD_NUMBER";
-        private const string REGISTERED_USER_DISPLAY_NAME = "REGISTERED_USER_DISPLAY_NAME";
-        private const string REGISTERED_USER_EMAIL_ADDRESS = "REGISTERED_USER_EMAIL_ADDRESS";
+        private const string BuildNumber = "BUILD_NUMBER";
+        private const string RegisteredUserDisplayName = "REGISTERED_USER_DISPLAY_NAME";
+        private const string RegisteredUserEmailAddress = "REGISTERED_USER_EMAIL_ADDRESS";
 
         private readonly int _buildNumber;
         private readonly string _registeredUserDisplayName;
@@ -58,7 +55,7 @@ namespace SoftwareNinjas.NAnt.Tasks
             : base(true)
         {
             #region BUILD_NUMBER
-            string buildNumberString = Environment.GetEnvironmentVariable(BUILD_NUMBER);
+            string buildNumberString = Environment.GetEnvironmentVariable(BuildNumber);
             if (null == buildNumberString || buildNumberString.Length == 0)
             {
                 _buildNumber = -1;
@@ -76,8 +73,8 @@ namespace SoftwareNinjas.NAnt.Tasks
             }
             #endregion
 
-            _registeredUserDisplayName = Environment.GetEnvironmentVariable(REGISTERED_USER_DISPLAY_NAME);
-            _registeredUserEmailAddress = Environment.GetEnvironmentVariable(REGISTERED_USER_EMAIL_ADDRESS);
+            _registeredUserDisplayName = Environment.GetEnvironmentVariable(RegisteredUserDisplayName);
+            _registeredUserEmailAddress = Environment.GetEnvironmentVariable(RegisteredUserEmailAddress);
         }
 
         /// <summary>

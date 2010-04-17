@@ -19,7 +19,7 @@ namespace SoftwareNinjas.NAnt.Tasks
         /// <param name="logging">
         /// Whether logging is enabled or not.
         /// </param>
-        public AbstractProjectTask(bool logging) : base(logging)
+        protected AbstractProjectTask(bool logging) : base(logging)
         {
         }
 

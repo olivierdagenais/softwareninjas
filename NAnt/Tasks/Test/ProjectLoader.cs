@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Xml;
 
 using Parent = SoftwareNinjas.NAnt.Tasks;
@@ -15,7 +13,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
     [TestFixture]
     public class ProjectLoader
     {
-        private XmlDocument LoadXml(string xml)
+        private static XmlDocument LoadXml(string xml)
         {
             var doc = new XmlDocument();
             doc.LoadXml(xml);
@@ -71,7 +69,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             {
                 new FileInfo( @"base\..\Tools\nant\bin\lib\net\2.0\nunit.framework.dll")
             };
-            EnumerableExtensions.EnumerateSame(expectedReferences, actualReferences, (fi) => fi.ToString());
+            EnumerableExtensions.EnumerateSame(expectedReferences, actualReferences, fi => fi.ToString());
         }
 
         /// <summary>

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 
 using NUnit.Framework;
-using SoftwareNinjas.Core.Test;
 using Parent = SoftwareNinjas.NAnt.Tasks;
 
 namespace SoftwareNinjas.NAnt.Tasks.Test
@@ -14,7 +13,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
     [TestFixture]
     public class CleanTask
     {
-        private string _baseFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        private readonly string _baseFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         /// <summary>
         /// Creates the folder structure used for the ExecuteTask tests.
@@ -79,7 +78,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             mustExist.Add("One");
             mustExist.Add("Two");
 
-            checkStructure(mustNotExist, mustExist);
+            CheckStructure(mustNotExist, mustExist);
         }
 
         /// <summary>
@@ -108,10 +107,10 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             mustExist.Add("Two/bin/Release");
             mustExist.Add("Two/obj/Release");
 
-            checkStructure(mustNotExist, mustExist);
+            CheckStructure(mustNotExist, mustExist);
         }
 
-        private void checkStructure(List<string> mustNotExist, List<string> mustExist)
+        private void CheckStructure(IEnumerable<string> mustNotExist, IEnumerable<string> mustExist)
         {
             foreach (var sub in mustNotExist)
             {

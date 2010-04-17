@@ -28,10 +28,10 @@ namespace SoftwareNinjas.NAnt.Tasks
     [TaskName("assemblyToJar")]
     public class AssemblyToJarTask : TestableTask
     {
-        private const string mainsoftForJava25 = 
+        private const string MainsoftForJava25 = 
             "HKEY_LOCAL_MACHINE\\SOFTWARE\\Mainsoft\\Mainsoft for Java EE 2.5\\9.0";
 
-        private const string netFramework =
+        private const string NetFramework =
             "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\.NETFramework";
 
         private readonly ICapturedProcessFactory _capturedProcessFactory;
@@ -77,14 +77,14 @@ namespace SoftwareNinjas.NAnt.Tasks
         /// </summary>
         protected override void ExecuteTask()
         {
-            string mainsoftBinPath = Registry.GetValue(mainsoftForJava25, "basedir", null) as string;
+            string mainsoftBinPath = Registry.GetValue(MainsoftForJava25, "basedir", null) as string;
             if (null == mainsoftBinPath)
             {
                 throw new BuildException("Unable to find an installation of Mainsoft for Java EE 2.5");
             }
             string converter = Path.Combine(mainsoftBinPath, "Converter.exe");
 
-            string installRoot = Registry.GetValue(netFramework, "InstallRoot", null) as string;
+            string installRoot = Registry.GetValue(NetFramework, "InstallRoot", null) as string;
             if (null == installRoot)
             {
                 throw new BuildException("Unable to find an installation of .NET");
@@ -105,8 +105,8 @@ namespace SoftwareNinjas.NAnt.Tasks
                         "/lib:" + netfx2 + ";" + assemblyPath.DirectoryName,
                         "/out:" + Path.ChangeExtension(assemblyPath.FullName, ".jar"),
                     }, 
-                    (line) => outLines.AppendLine(line),
-                    (line) => errLines.AppendLine(line)))
+                    line => outLines.AppendLine(line),
+                    line => errLines.AppendLine(line)))
                 {
                     exitCode = process.Run();
                 }

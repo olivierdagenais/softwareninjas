@@ -14,10 +14,10 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
     [TestFixture]
     public class CustomizeAssemblyTask
     {
-        private const string baselineFileContents = "empty file as a baseline";
-        private static readonly string[] projects = new string[] { "One", "Two" };
+        private const string BaselineFileContents = "empty file as a baseline";
+        private static readonly string[] Projects = new[] { "One", "Two" };
 
-        private string _baseFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+        private readonly string _baseFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
 
         /// <summary>
         /// Creates the folder structure used for the ExecuteTask tests.
@@ -25,12 +25,12 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         [SetUp]
         public void CreateStructure()
         {
-            foreach (var project in projects)
+            foreach (var project in Projects)
             {
                 var dir = Path.Combine(_baseFolder, project + "/Properties");
                 Directory.CreateDirectory(dir);
                 var file = Path.Combine(dir, "CustomInfo.cs");
-                File.WriteAllText(file, baselineFileContents);
+                File.WriteAllText(file, BaselineFileContents);
             }
         }
 
@@ -86,7 +86,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             var task = new Parent.CustomizeAssemblyTask(false, buildNumber, 
                 registeredUserDisplayName, registeredUserEmailAddress);
             task.Version = doc;
-            task.Projects = projects.Join(",");
+            task.Projects = Projects.Join(",");
             task.BaseDirectory = new DirectoryInfo(_baseFolder);
             task.ExecuteForTest();
 
@@ -94,18 +94,18 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             var registeredUserString = String.Format(
                 @"[assembly: RegisteredUser ( ""{0}"", ""{1}"" )]", 
                 registeredUserDisplayName, registeredUserEmailAddress);
-            foreach (var project in projects)
+            foreach (var project in Projects)
             {
                 var file = Path.Combine(_baseFolder, project + "/Properties/CustomInfo.cs");
                 Assert.IsTrue(File.Exists(file));
                 var contents = File.ReadAllText(file);
                 if (-1 == buildNumber)
                 {
-                    Assert.IsTrue(contents.Contains(baselineFileContents));
+                    Assert.IsTrue(contents.Contains(BaselineFileContents));
                 }
                 else
                 {
-                    Assert.IsFalse(contents.Contains(baselineFileContents));
+                    Assert.IsFalse(contents.Contains(BaselineFileContents));
 
                     if (String.IsNullOrEmpty(registeredUserDisplayName) 
                         || String.IsNullOrEmpty(registeredUserEmailAddress))

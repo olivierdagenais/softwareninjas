@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 using Parent = SoftwareNinjas.NAnt.Tasks;
 using SoftwareNinjas.Core.Process;
@@ -23,7 +19,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         [Test, Ignore("Disabled as C# to Java ByteCode support is suspended")]
         public void Execute_Simulated()
         {
-            SimulatedCapturedProcess simulated = new SimulatedCapturedProcess(0, (string) null, (string) null);
+            SimulatedCapturedProcess simulated = new SimulatedCapturedProcess(0, null, (string) null);
             ICapturedProcessFactory factory = new SimulatedCapturedProcessFactory(simulated);
             Parent.AssemblyToJarTask victim = new Parent.AssemblyToJarTask(false, factory);
             victim.AssemblyPaths = "Dependencies/Organization.Product.dll";

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 
 namespace SoftwareNinjas.NAnt.Tasks
@@ -10,7 +9,7 @@ namespace SoftwareNinjas.NAnt.Tasks
     public class Project
     {
         /// <summary>
-        /// Initializes a new instance of <see cref="Project"/>, which is rooted at <paramref name="baseDirectory"/>
+        /// Initializes a new instance of <see cref="Project"/>, which is rooted at <paramref name="folder"/>
         /// and is called <paramref name="projectName"/>.
         /// </summary>
         /// 
