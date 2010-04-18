@@ -63,6 +63,8 @@
     <Compile Include="Tasks\AssemblyToJarTask.cs" />
     <Compile Include="Tasks\CleanTask.cs" />
     <Compile Include="Tasks\CustomizeAssemblyTask.cs" />
+    <Compile Include="Tasks\FormField.cs" />
+    <Compile Include="Tasks\PostTask.cs" />
     <Compile Include="Tasks\Project.cs" />
     <Compile Include="Tasks\ProjectLoader.cs" />
     <Compile Include="Tasks\SupportedLanguage.cs" />
@@ -71,8 +73,11 @@
     <Compile Include="Tasks\Test\AssemblyToJarTask.cs" />
     <Compile Include="Tasks\Test\CleanTask.cs" />
     <Compile Include="Tasks\Test\CustomizeAssemblyTask.cs" />
+    <Compile Include="Tasks\Test\PostTask.cs" />
     <Compile Include="Tasks\Test\ProjectLoader.cs" />
     <Compile Include="Tasks\Test\TestTask.cs" />
+    <Compile Include="Tasks\Test\XpathTask.cs" />
+    <Compile Include="Tasks\XpathTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">

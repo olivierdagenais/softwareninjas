@@ -199,8 +199,7 @@ namespace SoftwareNinjas.Core
         {
             using (var sr = new StringReader(input))
             {
-                string line;
-                while (( line = sr.ReadLine() ) != null)
+                foreach (var line in sr.Lines())
                 {
                     yield return line;
                 }
