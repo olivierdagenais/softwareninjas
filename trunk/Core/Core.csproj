@@ -67,6 +67,7 @@
     <Compile Include="Test\EnumExtensions.cs" />
     <Compile Include="Test\StringExtensions.cs" />
     <Compile Include="Test\TreeExtensions.cs" />
+    <Compile Include="TextReaderExtensions.cs" />
     <Compile Include="Text\BruteForceMatcher.cs" />
     <Compile Include="Text\IMatcher.cs" />
     <Compile Include="Text\Test\AbstractMatcher.cs" />
