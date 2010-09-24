@@ -55,6 +55,7 @@
     <Compile Include="Process\Test\CapturedProcess.cs" />
     <Compile Include="Process\Test\SimulatedCapturedProcess.cs" />
     <Compile Include="Process\Test\SimulatedCapturedProcessFactory.cs" />
+    <Compile Include="StreamExtensions.cs" />
     <Compile Include="StringExtensions.cs" />
     <Compile Include="System\Delegates.cs" />
     <Compile Include="System\Linq\Enumerable.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="RegisteredUserAttribute.cs" />
     <Compile Include="Test\EnumerableExtensions.cs" />
     <Compile Include="Test\EnumExtensions.cs" />
+    <Compile Include="Test\StreamExtensions.cs" />
     <Compile Include="Test\StringExtensions.cs" />
     <Compile Include="Test\TreeExtensions.cs" />
     <Compile Include="TextReaderExtensions.cs" />
