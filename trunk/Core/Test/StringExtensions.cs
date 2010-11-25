@@ -181,6 +181,17 @@ namespace SoftwareNinjas.Core.Test
         }
 
         /// <summary>
+        /// Tests the <see cref="Parent.StringExtensions.UnformatInvariant(String, String)" /> method with
+        /// a format string where one of the format placeholders was not in the string.
+        /// </summary>
+        [Test]
+        public void UnformatInvariant_UnusedFormatPlaceholders ()
+        {
+            var actual = Parent.StringExtensions.UnformatInvariant ("zero one two four", "{0} {1} {2} {4}");
+            EnumerableExtensions.EnumerateSame (new[] { "zero", "one", "two", String.Empty, "four" }, actual);
+        }
+
+        /// <summary>
         /// Tests <see cref="Parent.StringExtensions.CombinePath(String,String[])"/>
         /// with zero additional path fragments.
         /// </summary>
