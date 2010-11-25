@@ -71,12 +71,14 @@
     <Compile Include="Test\StreamExtensions.cs" />
     <Compile Include="Test\StringExtensions.cs" />
     <Compile Include="Test\TreeExtensions.cs" />
+    <Compile Include="Test\Unformatter.cs" />
     <Compile Include="TextReaderExtensions.cs" />
     <Compile Include="Text\BruteForceMatcher.cs" />
     <Compile Include="Text\IMatcher.cs" />
     <Compile Include="Text\Test\AbstractMatcher.cs" />
     <Compile Include="Text\Test\BruteForceMatcher.cs" />
     <Compile Include="TreeExtensions.cs" />
+    <Compile Include="Unformatter.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -207,7 +207,6 @@ namespace SoftwareNinjas.Core
             }
         }
 
-        private const RegexOptions StandardOptions = RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant;
         /// <summary>
         /// Performs the reverse of <see cref="FormatInvariant(String, Object[])"/> by trying to determine what the
         /// string representations of the objects were when they were formatted into <paramref name="format"/> to yield
@@ -226,33 +225,13 @@ namespace SoftwareNinjas.Core
         /// An <see cref="IList{String}"/> representing the string representations of the objects formatted into
         /// <paramref name="format"/>.
         /// </returns>
+        /// 
+        /// <remarks>
+        /// An extension method version of <see cref="Unformatter.UnformatInvariant(String, String)"/>.
+        /// </remarks>
         public static IList<string> UnformatInvariant(this string formatted, string format)
         {
-            var result = new List<string> ();
-            var placeholderPattern = new Regex (@"{(?<index>\d+)}", StandardOptions);
-            var placeholders = placeholderPattern.Matches (format);
-            if (placeholders.Count > 0)
-            {
-                var maximumFormatIndex = 0;
-                for (var i = 0; i < placeholders.Count; i++)
-                {
-                    var index = Convert.ToInt32 (placeholders[i].Groups[1].Value, 10);
-                    maximumFormatIndex = Math.Max (maximumFormatIndex, index);
-                }
-                // replace a substring like "{0}" with "(?<c0>.+)"
-                var pattern = placeholderPattern.Replace (format, @"(?<c${index}>.+)");
-                var matches = Regex.Match (formatted, pattern, StandardOptions);
-                if (matches.Success)
-                {
-                    for (var i = 0; i <= maximumFormatIndex; i++)
-                    {
-                        var groupName = "c{0}".FormatInvariant (i);
-                        result.Add (matches.Groups[groupName].Value);
-                    }
-                }
-            }
-            // TODO: should probably wrap result in a ReadOnlyCollection
-            return result;
+            return Unformatter.UnformatInvariant (formatted, format);
         }
 
         /// <summary>
