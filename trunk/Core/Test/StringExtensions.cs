@@ -169,6 +169,16 @@ namespace SoftwareNinjas.Core.Test
             EnumerableExtensions.EnumerateSame (new[] {"red"}, actual);
         }
 
+        /// <summary>
+        /// Tests the <see cref="Parent.StringExtensions.UnformatInvariant(String, String)" /> method with
+        /// a format string where the format placeholders are not in order.
+        /// </summary>
+        [Test]
+        public void UnformatInvariant_ReversedSpecifiers ()
+        {
+            var actual = Parent.StringExtensions.UnformatInvariant ("one zero", "{1} {0}");
+            EnumerableExtensions.EnumerateSame (new[] {"zero", "one"}, actual);
+        }
 
         /// <summary>
         /// Tests <see cref="Parent.StringExtensions.CombinePath(String,String[])"/>
