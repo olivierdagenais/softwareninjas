@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SoftwareNinjas.Core
 {
@@ -204,6 +205,42 @@ namespace SoftwareNinjas.Core
                     yield return line;
                 }
             }
+        }
+
+        private const RegexOptions StandardOptions = RegexOptions.ExplicitCapture | RegexOptions.CultureInvariant;
+        /// <summary>
+        /// Performs the reverse of <see cref="FormatInvariant(String, Object[])"/> by trying to determine what the
+        /// string representations of the objects were when they were formatted into <paramref name="format"/> to yield
+        /// <paramref name="formatted"/>.
+        /// </summary>
+        /// 
+        /// <param name="formatted">
+        /// The result of formatting <paramref name="format"/> with zero or more objects.
+        /// </param>
+        /// 
+        /// <param name="format">
+        /// A composite format string.
+        /// </param>
+        /// 
+        /// <returns>
+        /// An <see cref="IList{String}"/> representing the string representations of the objects formatted into
+        /// <paramref name="format"/>.
+        /// </returns>
+        public static IList<string> UnformatInvariant(this string formatted, string format)
+        {
+            var result = new List<string> ();
+            // replace a substring like "{0}" with "(?<c0>.+)"
+            var pattern = Regex.Replace (format, @"{(?<index>\d+)}", @"(?<c${index}>.+)", StandardOptions);
+            var matches = Regex.Match (formatted, pattern, StandardOptions);
+            if (matches.Success)
+            {
+                // TODO: the order of the groups might not match the order of the format specifiers
+                for (int i = 1; i < matches.Groups.Count; i++)
+                {
+                    result.Add (matches.Groups[i].Value);
+                }
+            }
+            return result;
         }
 
         /// <summary>
