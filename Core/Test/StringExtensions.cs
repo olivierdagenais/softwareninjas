@@ -102,17 +102,17 @@ namespace SoftwareNinjas.Core.Test
         [Test]
         public void Insert_Typical()
         {
-            var source = @"1
+            const string source = @"1
 2
 3
 4
 5
 6";
-            var inserted = @"5.1
+            const string inserted = @"5.1
 5.2
 5.3";
 
-            var expected = @"1
+            const string expected = @"1
 2
 3
 4
@@ -157,6 +157,18 @@ namespace SoftwareNinjas.Core.Test
 			EnumerableExtensions.EnumerateSame(expected, expected.Join("\r").Lines());
 			EnumerableExtensions.EnumerateSame(expected, expected.Join("\n").Lines());
 		}
+
+        /// <summary>
+        /// Tests the <see cref="Parent.StringExtensions.UnformatInvariant(String, String)" /> method with
+        /// a typical use case.
+        /// </summary>
+        [Test]
+        public void UnformatInvariant_Typical ()
+        {
+            var actual = Parent.StringExtensions.UnformatInvariant ("'red' alert", "'{0}' alert");
+            EnumerableExtensions.EnumerateSame (new[] {"red"}, actual);
+        }
+
 
         /// <summary>
         /// Tests <see cref="Parent.StringExtensions.CombinePath(String,String[])"/>
