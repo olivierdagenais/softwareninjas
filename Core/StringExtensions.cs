@@ -229,17 +229,29 @@ namespace SoftwareNinjas.Core
         public static IList<string> UnformatInvariant(this string formatted, string format)
         {
             var result = new List<string> ();
-            // replace a substring like "{0}" with "(?<c0>.+)"
-            var pattern = Regex.Replace (format, @"{(?<index>\d+)}", @"(?<c${index}>.+)", StandardOptions);
-            var matches = Regex.Match (formatted, pattern, StandardOptions);
-            if (matches.Success)
+            var placeholderPattern = new Regex (@"{(?<index>\d+)}", StandardOptions);
+            var placeholders = placeholderPattern.Matches (format);
+            if (placeholders.Count > 0)
             {
-                for (int i = 1; i < matches.Groups.Count; i++)
+                var maximumFormatIndex = 0;
+                for (var i = 0; i < placeholders.Count; i++)
                 {
-                    var groupName = "c{0}".FormatInvariant (i - 1);
-                    result.Add (matches.Groups[groupName].Value);
+                    var index = Convert.ToInt32 (placeholders[i].Groups[1].Value, 10);
+                    maximumFormatIndex = Math.Max (maximumFormatIndex, index);
+                }
+                // replace a substring like "{0}" with "(?<c0>.+)"
+                var pattern = placeholderPattern.Replace (format, @"(?<c${index}>.+)");
+                var matches = Regex.Match (formatted, pattern, StandardOptions);
+                if (matches.Success)
+                {
+                    for (var i = 0; i <= maximumFormatIndex; i++)
+                    {
+                        var groupName = "c{0}".FormatInvariant (i);
+                        result.Add (matches.Groups[groupName].Value);
+                    }
                 }
             }
+            // TODO: should probably wrap result in a ReadOnlyCollection
             return result;
         }
 
