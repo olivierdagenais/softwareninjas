@@ -234,10 +234,10 @@ namespace SoftwareNinjas.Core
             var matches = Regex.Match (formatted, pattern, StandardOptions);
             if (matches.Success)
             {
-                // TODO: the order of the groups might not match the order of the format specifiers
                 for (int i = 1; i < matches.Groups.Count; i++)
                 {
-                    result.Add (matches.Groups[i].Value);
+                    var groupName = "c{0}".FormatInvariant (i - 1);
+                    result.Add (matches.Groups[groupName].Value);
                 }
             }
             return result;
