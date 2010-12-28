@@ -55,11 +55,28 @@ namespace SoftwareNinjas.Core.Test
         /// </summary>
         public void Run()
         {
+            AssertAssumptions ();
             AssertReflexivity ();
             AssertSymmetry ();
             AssertTransitivity ();
             AssertNotEqualToNull ();
             AssertConsistentWithHashCode ();
+        }
+
+        /// <summary>
+        /// Confirms that <c>x</c>, <c>y</c> and <c>z</c> are all equal to each other and that <c>a</c> is different
+        /// from all of them.
+        /// </summary>
+        [Test]
+        public void AssertAssumptions()
+        {
+            Assert.AreEqual (true, _x.Equals (_y));
+            Assert.AreEqual (true, _y.Equals (_z));
+            Assert.AreEqual (true, _x.Equals (_z));
+
+            Assert.AreEqual (false, _a.Equals (_x));
+            Assert.AreEqual (false, _a.Equals (_y));
+            Assert.AreEqual (false, _a.Equals (_z));
         }
 
         /// <summary>

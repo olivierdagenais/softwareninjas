@@ -67,6 +67,7 @@
     <Compile Include="Test\EnumerableExtensions.cs" />
     <Compile Include="Test\EnumExtensions.cs" />
     <Compile Include="Test\EqualsTester.cs" />
+    <Compile Include="Test\EqualsTesterTest.cs" />
     <Compile Include="Test\PairTest.cs" />
     <Compile Include="Test\StreamExtensions.cs" />
     <Compile Include="Test\StringExtensions.cs" />
