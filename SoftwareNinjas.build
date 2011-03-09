@@ -7,6 +7,7 @@
     <loadtasks assembly="Tools/nantcontrib/bin/NAnt.Contrib.Tasks.dll" />
 
     <property name="configuration" value="Debug" overwrite="false" />
+    <property name="TargetFrameworkVersion" value="v2.0" overwrite="false" />
     <property name="projects" value="Core,MSBuild,NAnt" />
 
     <target name="schema">
@@ -44,6 +45,7 @@
     <target name="compile" depends="customize">
         <msbuild project="SoftwareNinjas.sln">
             <arg value="/property:Configuration=${configuration}" />
+            <arg value="/property:TargetFrameworkVersion=${TargetFrameworkVersion}" />
             <arg value="/verbosity:minimal" />
         </msbuild>
     </target>
@@ -77,24 +79,25 @@
             <property name="buildNumber" value="private"/>
         </if>
         <property name="versionFolder" value="SoftwareNinjas-${major}.${minor}.${buildNumber}"/>
+        <property name="deployFolder" value="Deploy-${TargetFrameworkVersion}" />
 
-        <delete dir="Deploy" failonerror="false"/>
-        <mkdir dir="Deploy/${versionFolder}"/>
-        <copy todir="Deploy/${versionFolder}" flatten="true">
+        <delete dir="${deployFolder}" failonerror="false"/>
+        <mkdir dir="${deployFolder}/${versionFolder}"/>
+        <copy todir="${deployFolder}/${versionFolder}" flatten="true">
             <fileset>
                 <include name="*/bin/${configuration}/SoftwareNinjas.*.dll"/>
                 <include name="*/bin/${configuration}/SoftwareNinjas.*.xml"/>
                 <include name="MSBuild/SoftwareNinjas.*.targets"/>
             </fileset>
         </copy>
-        <copy todir="Deploy/${versionFolder}/doc">
+        <copy todir="${deployFolder}/${versionFolder}/doc">
             <fileset basedir="Documentation">
                 <include name="**"/>
             </fileset>
         </copy>
 
-        <zip zipfile="Deploy/${versionFolder}.zip">
-            <fileset basedir="Deploy">
+        <zip zipfile="${deployFolder}/${versionFolder}.zip">
+            <fileset basedir="${deployFolder}">
                 <include name="${versionFolder}/**"/>
             </fileset>
         </zip>
