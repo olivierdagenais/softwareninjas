@@ -90,6 +90,7 @@
     <Compile Include="ResolveJavaReferences.cs" />
     <Compile Include="TemplateCompiler.cs" />
     <Compile Include="Test\TemplateCompiler.cs" />
+    <Compile Include="Zip.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Core\Core.csproj">
