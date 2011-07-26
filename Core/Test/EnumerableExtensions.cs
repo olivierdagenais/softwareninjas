@@ -95,12 +95,23 @@ namespace SoftwareNinjas.Core.Test
         {
             var eEnum = expected.GetEnumerator();
             var aEnum = actual.GetEnumerator();
+            bool moved;
             while (eEnum.MoveNext())
             {
-                Assert.IsTrue(aEnum.MoveNext());
-                Assert.AreEqual(comparisonBasis(eEnum.Current), comparisonBasis(aEnum.Current));
+                var expectedItem = comparisonBasis(eEnum.Current);
+                moved = aEnum.MoveNext();
+                if (!moved)
+                {
+                    Assert.Fail("Insufficient items in 'actual' sequence.  Next expected item: {0}", expectedItem);
+                }
+                Assert.AreEqual(expectedItem, comparisonBasis(aEnum.Current));
             }
-            Assert.IsFalse(aEnum.MoveNext());
+            moved = aEnum.MoveNext();
+            if (moved)
+            {
+                var actualItem = comparisonBasis(aEnum.Current);
+                Assert.Fail("Too many items in 'actual' sequence.  Next actual item: {0}", actualItem);
+            }
         }
 
         /// <summary>
@@ -307,6 +318,51 @@ namespace SoftwareNinjas.Core.Test
             Assert.AreEqual("\"--summary=$projectName ($reviewer): $summary\" --target-people=$reviewer", 
                 new string[] { "--summary=$projectName ($reviewer): $summary", 
                         "--target-people=$reviewer" }.QuoteForShell());
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.EnumerableExtensions.ToList{T}(IEnumerable{T})"/>
+        /// with an empty sequence.
+        /// </summary>
+        [Test]
+        public void ToList_EmptyEnumerableOfInt()
+        {
+            var actual = Parent.EnumerableExtensions.ToList(new int[] { });
+            Assert.AreEqual(0, actual.Count);
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.EnumerableExtensions.ToList{T}(IEnumerable{T})"/>
+        /// to make sure we can't add to the list.
+        /// </summary>
+        [Test, ExpectedException(typeof(NotSupportedException))]
+        public void ToList_ListIsReadOnly()
+        {
+            var actual = Parent.EnumerableExtensions.ToList(new int[] { });
+            actual.Add(42);
+        }
+
+        private static IEnumerable<T> Generate<T>(params T[] strings)
+        {
+            foreach (var s in strings)
+            {
+                yield return s;
+            }
+        }
+
+        /// <summary>
+        /// Tests <see cref="Parent.EnumerableExtensions.ToList{T}(IEnumerable{T})"/>
+        /// with a generator/iterator (i.e. a method that yields a sequence of items).
+        /// </summary>
+        [Test]
+        public void ToList_StringGenerator()
+        {
+            var generator = Generate("zero", "one", "two");
+            var actual = Parent.EnumerableExtensions.ToList(generator);
+            Assert.AreEqual(3, actual.Count);
+            Assert.AreEqual("zero", actual[0]);
+            Assert.AreEqual("one", actual[1]);
+            Assert.AreEqual("two", actual[2]);
         }
     }
 }
