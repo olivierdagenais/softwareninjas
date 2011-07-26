@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace SoftwareNinjas.Core
@@ -430,6 +431,28 @@ namespace SoftwareNinjas.Core
                 return s;
             };
             return Join(values, " ", stringifier);
+        }
+
+        /// <summary>
+        /// Converts a sequence of <typeparamref name="T"/> to a <see cref="IList{T}"/>.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of elements in the <paramref name="sequence"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="sequence">
+        /// The sequence to convert to a <see cref="IList{T}"/>.
+        /// </param>
+        /// 
+        /// <returns>
+        /// A read-only <see cref="IList{T}"/> representing the elements in the <paramref name="sequence"/>.
+        /// </returns>
+        public static IList<T> ToList<T>(this IEnumerable<T> sequence)
+        {
+            var list = new List<T>(sequence);
+            var readOnlyCollection = new ReadOnlyCollection<T>(list);
+            return readOnlyCollection;
         }
     }
 }
