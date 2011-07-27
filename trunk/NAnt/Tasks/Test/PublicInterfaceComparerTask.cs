@@ -77,15 +77,14 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         [Test]
         public void Compare_DifferentAssemblies()
         {
-            // arrange
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility);
+            // assert
             var challengerBlockModifier = _visibility.GetType(TextileBlockModifier);
             var challengerTbcbm = _visibility.GetType(TextileBlocksCapitalsBlockModifier);
             var challengerTbhlbm = _visibility.GetType(TextileBlocksHyperLinkBlockModifier);
             var challengerTfsa = _visibility.GetType(TextileFormatterStateAttribute);
             var challengerTbntbm = _visibility.GetType(TextileBlocksNoTextileBlockModifier);
-            // act
-            var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility);
-            // assert
             var expected = new MemberInfo[]
             {
                 GetBaselineConclude("BlockModifier"),
@@ -198,8 +197,8 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         public void AreEqual_MethodInfoInstancesFromOverloadsWithDifferentTypesOfParameters()
         {
             // arrange
-            var baseline = GetConvertToStringOverload(typeof(bool));
-            var challenger = GetConvertToStringOverload(typeof(byte));
+            var baseline = GetConvertToStringOverload(typeof (bool));
+            var challenger = GetConvertToStringOverload(typeof (byte));
             // act
             var actual = Parent.PublicInterfaceComparerTask.AreEqual(baseline, challenger);
             // assert
@@ -210,7 +209,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
 
         private static MethodInfo GetConvertToStringOverload(Type type)
         {
-            var convertType = typeof(Convert);
+            var convertType = typeof (Convert);
             var result = convertType.GetMethod("ToString", DefaultBindingFlags | BindingFlags.ExactBinding,
                 null, new[] { type }, null);
             return result;
@@ -219,7 +218,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         private static MethodInfo GetModifyLineMethod(Assembly assembly, string className)
         {
             var blockModifierType = assembly.GetType(className);
-            var formalParameterTypes = new[] { typeof(String) };
+            var formalParameterTypes = new[] {typeof (String)};
             var result = blockModifierType.GetMethod("ModifyLine", 
                 DefaultBindingFlags | BindingFlags.ExactBinding, null, formalParameterTypes, null);
             return result;
@@ -323,13 +322,13 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // arrange
             var baseline = _baseline.GetType(TextileBlocksCapitalsBlockModifier);
             var challenger = _visibility.GetType(TextileBlocksCapitalsBlockModifier);
-            var baselineConclude = baseline.GetMethod("Conclude");
-            var challengerCapitalsFormatMatchEvaluator = challenger.GetMethod("CapitalsFormatMatchEvaluator");
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(baseline, challenger);
             // assert
-            CoreTest.EnumerableExtensions.EnumerateSame
-                (new MemberInfo[] { baselineConclude, challengerCapitalsFormatMatchEvaluator }, actual);
+            var baselineConclude = baseline.GetMethod("Conclude");
+            var challengerCapitalsFormatMatchEvaluator = challenger.GetMethod("CapitalsFormatMatchEvaluator");
+            var expected = new MemberInfo[] { baselineConclude, challengerCapitalsFormatMatchEvaluator };
+            CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
         }
 
         /// <summary>
@@ -342,13 +341,13 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // arrange
             var baseline = _baseline.GetType(TextileBlocksHyperLinkBlockModifier);
             var challenger = _visibility.GetType(TextileBlocksHyperLinkBlockModifier);
-            var baselineConclude = baseline.GetMethod("Conclude");
-            var challengerMRel = challenger.GetField("m_rel");
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(baseline, challenger);
             // assert
-            CoreTest.EnumerableExtensions.EnumerateSame
-                (new MemberInfo[] { baselineConclude, challengerMRel }, actual);
+            var baselineConclude = baseline.GetMethod("Conclude");
+            var challengerMRel = challenger.GetField("m_rel");
+            var expected = new MemberInfo[] { baselineConclude, challengerMRel };
+            CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
         }
 
         /// <summary>
@@ -361,13 +360,13 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // arrange
             var baseline = _baseline.GetType(TextileBlocksHyperLinkBlockModifier);
             var challenger = _visibility.GetType(TextileBlocksHyperLinkBlockModifier);
-            var baselineConclude = baseline.GetMethod("Conclude");
-            var challengerMRel = challenger.GetField("m_rel");
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(challenger, baseline);
             // assert
-            CoreTest.EnumerableExtensions.EnumerateSame
-                (new MemberInfo[] { challengerMRel, baselineConclude }, actual);
+            var baselineConclude = baseline.GetMethod("Conclude");
+            var challengerMRel = challenger.GetField("m_rel");
+            var expected = new MemberInfo[] { challengerMRel, baselineConclude };
+            CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
         }
 
         /// <summary>
@@ -382,8 +381,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(challenger, challenger);
             // assert
-            CoreTest.EnumerableExtensions.EnumerateSame
-                (EmptyMemberInfoSequence, actual);
+            CoreTest.EnumerableExtensions.EnumerateSame(EmptyMemberInfoSequence, actual);
         }
 
         /// <summary>
@@ -396,12 +394,12 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // arrange
             var baseline = _baseline.GetType(TextileFormatterStateAttribute);
             var challenger = _visibility.GetType(TextileFormatterStateAttribute);
-            var challengerPatternSet = challenger.GetMethod("set_Pattern", new[] {typeof (String)});
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(baseline, challenger);
             // assert
-            CoreTest.EnumerableExtensions.EnumerateSame
-                (new MemberInfo[] { challengerPatternSet }, actual);
+            var challengerPatternSet = challenger.GetMethod("set_Pattern", new[] {typeof (String)});
+            var expected = new MemberInfo[] { challengerPatternSet };
+            CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
         }
 
         /// <summary>
@@ -414,14 +412,14 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // arrange
             var baseline = _baseline.GetType(TextileBlocksNoTextileBlockModifier);
             var challenger = _visibility.GetType(TextileBlocksNoTextileBlockModifier);
-            var baselineConclude = baseline.GetMethod("Conclude");
-            var challengerAddStuff = challenger.GetMethod("add_Stuff", new[] {typeof (EventHandler)});
-            var challengerRemoveStuff = challenger.GetMethod("remove_Stuff", new[] {typeof (EventHandler)});
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(baseline, challenger);
             // assert
-            CoreTest.EnumerableExtensions.EnumerateSame
-                (new MemberInfo[] { baselineConclude, challengerAddStuff, challengerRemoveStuff }, actual);
+            var baselineConclude = baseline.GetMethod("Conclude");
+            var challengerAddStuff = challenger.GetMethod("add_Stuff", new[] {typeof (EventHandler)});
+            var challengerRemoveStuff = challenger.GetMethod("remove_Stuff", new[] {typeof (EventHandler)});
+            var expected = new MemberInfo[] { baselineConclude, challengerAddStuff, challengerRemoveStuff };
+            CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
         }
     }
 }
