@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -17,8 +18,12 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
     {
         private const BindingFlags DefaultBindingFlags = 
             BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public;
+        private const BindingFlags NonPublicInstance =
+            BindingFlags.NonPublic | BindingFlags.Instance;
         private const string TextileBlockModifier = "Textile.BlockModifier";
         private const string TextileFormatterStateAttribute = "Textile.FormatterStateAttribute";
+        private const string TextileBlocksCodeBlockModifier = "Textile.Blocks.CodeBlockModifier";
+        private const string TextileBlocksPhraseBlockModifier = "Textile.Blocks.PhraseBlockModifier";
         private const string TextileBlocksBoldPhraseBlockModifier = "Textile.Blocks.BoldPhraseBlockModifier";
         private const string TextileBlocksCapitalsBlockModifier = "Textile.Blocks.CapitalsBlockModifier";
         private const string TextileBlocksHyperLinkBlockModifier = "Textile.Blocks.HyperLinkBlockModifier";
@@ -78,51 +83,9 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         public void Compare_DifferentAssemblies()
         {
             // act
-            var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility);
+            var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility).ToList();
             // assert
-            var challengerBlockModifier = _visibility.GetType(TextileBlockModifier);
-            var challengerTbcbm = _visibility.GetType(TextileBlocksCapitalsBlockModifier);
-            var challengerTbhlbm = _visibility.GetType(TextileBlocksHyperLinkBlockModifier);
-            var challengerTfsa = _visibility.GetType(TextileFormatterStateAttribute);
-            var challengerTbntbm = _visibility.GetType(TextileBlocksNoTextileBlockModifier);
-            var expected = new MemberInfo[]
-            {
-                GetBaselineConclude("BlockModifier"),
-                challengerBlockModifier.GetConstructor(Type.EmptyTypes),
-                GetBaselineConclude("Blocks.PhraseBlockModifier"),
-                GetBaselineConclude("Blocks.DeletedPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.BoldPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.InsertedPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.GlyphBlockModifier"),
-                GetBaselineConclude("Blocks.EmphasisPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.PreBlockModifier"),
-                GetBaselineConclude("Blocks.HyperLinkBlockModifier"),
-                challengerTbhlbm.GetField("m_rel"),
-                challengerTfsa.GetMethod("set_Pattern", new[] { typeof(String) }),
-                GetBaselineConclude("Blocks.SubScriptPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.SuperScriptPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.ItalicPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.NoTextileBlockModifier"),
-                challengerTbntbm.GetMethod("add_Stuff", new[] { typeof(EventHandler) }),
-                challengerTbntbm.GetMethod("remove_Stuff", new[] { typeof(EventHandler) }),
-                GetBaselineConclude("Blocks.FootNoteReferenceBlockModifier"),
-                GetBaselineConclude("Blocks.StrongPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.SpanPhraseBlockModifier"),
-                GetBaselineConclude("Blocks.ImageBlockModifier"),
-                GetBaselineConclude("Blocks.CitePhraseBlockModifier"),
-                GetBaselineConclude("Blocks.CapitalsBlockModifier"),
-                challengerTbcbm.GetMethod("CapitalsFormatMatchEvaluator"),
-                GetBaselineConclude("Blocks.CodeBlockModifier"),
-            };
-            CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
-        }
-
-        private MethodInfo GetBaselineConclude(string className)
-        {
-            var name = "Textile." + className;
-            var type = _baseline.GetType(name);
-            Assert.IsNotNull(type, "Unable to find type: {0}", name);
-            return type.GetMethod("Conclude");
+            Assert.AreEqual(118, actual.Count);
         }
 
         /// <summary>
@@ -205,7 +168,53 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             Assert.AreEqual(false, actual);
         }
 
-        // TODO: check two methods with the same signature, but one is static, the other is instance
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.AreEqual(MethodBase,MethodBase)"/> method with
+        /// two methods that have different visibility (protected vs. internal).
+        /// </summary>
+        [Test]
+        public void AreEqual_MethodInfoInstancesWithDifferentVisibility()
+        {
+            // arrange
+            var baseline = _baseline.GetType(TextileBlocksPhraseBlockModifier);
+            var challenger = _visibility.GetType(TextileBlocksPhraseBlockModifier);
+            var baselinePmf = GetPhraseModifierFormatMethod(baseline);
+            var challengerPmf = GetPhraseModifierFormatMethod(challenger);
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.AreEqual(baselinePmf, challengerPmf);
+            // assert
+            Assert.AreEqual(false, actual);
+        }
+
+        private static MethodInfo GetPhraseModifierFormatMethod(Type type)
+        {
+            return type.GetMethod("PhraseModifierFormat", 
+                BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.AreEqual(MethodBase,MethodBase)"/> method with
+        /// two methods that have different "instance-ness" (static vs. instance).
+        /// </summary>
+        [Test]
+        public void AreEqual_MethodInfoInstancesWithDifferentInstanceness()
+        {
+            // arrange
+            var baseline = _baseline.GetType(TextileBlocksCodeBlockModifier);
+            var challenger = _visibility.GetType(TextileBlocksCodeBlockModifier);
+            var baselineCfme = GetCodeFormatMatchEvaluatorMethod(baseline);
+            var challengerCfme = GetCodeFormatMatchEvaluatorMethod(challenger);
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.AreEqual(baselineCfme, challengerCfme);
+            // assert
+            Assert.AreEqual(false, actual);
+        }
+
+        private static MethodInfo GetCodeFormatMatchEvaluatorMethod(Type type)
+        {
+            return type.GetMethod("CodeFormatMatchEvaluator",
+                BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static);
+        }
 
         private static MethodInfo GetConvertToStringOverload(Type type)
         {
@@ -330,6 +339,128 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             var expected = new MemberInfo[] { baselineConclude, challengerCapitalsFormatMatchEvaluator };
             CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
         }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Compare(Type,Type)"/> method with
+        /// a type that had protected methods in the baseline, but now they are internal.
+        /// </summary>
+        [Test]
+        public void Compare_TypeInstanceWithProtectedMethod()
+        {
+            // arrange
+            var baseline = _baseline.GetType(TextileBlocksPhraseBlockModifier);
+            var challenger = _visibility.GetType(TextileBlocksPhraseBlockModifier);
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Compare(baseline, challenger);
+            // assert
+            var baselineConclude = baseline.GetMethod("Conclude");
+            var baselineConstructor = baseline.GetConstructor
+                (NonPublicInstance, null, Type.EmptyTypes, null);
+            var threeStrings = new[] {typeof (string), typeof (string), typeof (string)};
+            var baselinePhraseModifierFormat = baseline.GetMethod
+                ("PhraseModifierFormat", NonPublicInstance, null, threeStrings, null);
+            var expected = new MemberInfo[] {baselinePhraseModifierFormat, baselineConclude, baselineConstructor};
+            CoreTest.EnumerableExtensions.EnumerateSame(expected, actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Compare(Type,Type)"/> method with
+        /// a type that had a static method in the baseline, but now it is an instance method.
+        /// </summary>
+        [Test]
+        public void Compare_TypeInstanceWithStaticMethod()
+        {
+            // arrange
+            var baseline = _baseline.GetType(TextileBlocksCodeBlockModifier);
+            var challenger = _visibility.GetType(TextileBlocksCodeBlockModifier);
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Compare(baseline, challenger);
+            // assert
+            var baselineConclude = baseline.GetMethod("Conclude");
+            var baselineCfme = baseline.GetMethod("CodeFormatMatchEvaluator");
+            var challengerCfme = challenger.GetMethod("CodeFormatMatchEvaluator");
+            var expected = new MemberInfo[] {baselineConclude, baselineCfme, challengerCfme};
+            // compare with a dictionary, because the ordering is unpredictable
+            var actualDictionary = new Dictionary<MemberInfo, MemberInfo>();
+            foreach (var memberInfo in actual)
+            {
+                actualDictionary.Add(memberInfo, memberInfo);
+            }
+            foreach (var memberInfo in expected)
+            {
+                if(actualDictionary.ContainsKey(memberInfo))
+                {
+                    actualDictionary.Remove(memberInfo);
+                }
+                else
+                {
+                    Assert.Fail("Actual did not contain '{0}'", memberInfo);
+                }
+            }
+            if(actualDictionary.Count > 0)
+            {
+                Assert.Fail("There were leftover items in actual.");
+            }
+        }
+
+        /// <summary>
+        /// Test the <see cref="Parent.PublicInterfaceComparerTask.IsVisible(MethodBase)"/> method
+        /// with a method marked public.
+        /// </summary>
+        [Test]
+        public void IsVisibleMethodBase_Public()
+        {
+            var baseline = _baseline.GetType(TextileBlocksBoldPhraseBlockModifier);
+            var baselineMethod = baseline.GetMethod("ModifyLine");
+            var actual = Parent.PublicInterfaceComparerTask.IsVisible(baselineMethod);
+            Assert.AreEqual(true, actual);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Parent.PublicInterfaceComparerTask.IsVisible(MethodBase)"/> method
+        /// with a method marked protected.
+        /// </summary>
+        [Test]
+        public void IsVisibleMethodBase_Protected()
+        {
+            var baseline = _baseline.GetType(TextileBlocksPhraseBlockModifier);
+            var baselineConstructor = baseline.GetConstructor
+                (NonPublicInstance, null, Type.EmptyTypes, null);
+            var actual = Parent.PublicInterfaceComparerTask.IsVisible(baselineConstructor);
+            Assert.AreEqual(true, actual);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Parent.PublicInterfaceComparerTask.IsVisible(MethodBase)"/> method
+        /// with a method marked internal.
+        /// </summary>
+        [Test]
+        public void IsVisibleMethodBase_Internal()
+        {
+            var formatterStateType = _baseline.GetType("Textile.FormatterState");
+            var baseline = _baseline.GetType("Textile.TextileFormatter");
+            var oneFormatterState = new[] { formatterStateType };
+            var baselineMethod = baseline.GetMethod
+                ("ChangeState", NonPublicInstance, null, oneFormatterState, null);
+            var actual = Parent.PublicInterfaceComparerTask.IsVisible(baselineMethod);
+            Assert.AreEqual(false, actual);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Parent.PublicInterfaceComparerTask.IsVisible(MethodBase)"/> method
+        /// with a method marked private.
+        /// </summary>
+        [Test]
+        public void IsVisibleMethodBase_Private()
+        {
+            var baseline = _baseline.GetType("Textile.TextileFormatter");
+            var oneString = new[] {typeof (string)};
+            var baselineMethod = baseline.GetMethod
+                ("CleanWhiteSpace", NonPublicInstance, null, oneString, null);
+            var actual = Parent.PublicInterfaceComparerTask.IsVisible(baselineMethod);
+            Assert.AreEqual(false, actual);
+        }
+
 
         /// <summary>
         /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Compare(Type,Type)"/> method with
