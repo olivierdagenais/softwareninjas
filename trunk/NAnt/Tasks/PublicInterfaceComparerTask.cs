@@ -4,6 +4,7 @@ using System.IO;
 using System.Reflection;
 using NAnt.Core;
 using NAnt.Core.Attributes;
+using SoftwareNinjas.Core;
 
 namespace SoftwareNinjas.NAnt.Tasks
 {
@@ -204,7 +205,12 @@ namespace SoftwareNinjas.NAnt.Tasks
         internal static bool AreEqual(MethodBase baseline, MethodBase challenger)
         {
             var result = baseline.Name == challenger.Name
-                           && HaveSameName(baseline.DeclaringType, challenger.DeclaringType);
+                           && HaveSameName(baseline.DeclaringType, challenger.DeclaringType)
+                           && baseline.IsFamily == challenger.IsFamily
+                           && baseline.IsPrivate == challenger.IsPrivate
+                           && baseline.IsPublic == challenger.IsPublic
+                           && baseline.IsAssembly == challenger.IsAssembly
+                           && baseline.IsStatic == challenger.IsStatic;
             var baseParameters = baseline.GetParameters();
             var challengerParameters = challenger.GetParameters();
             if (result)
@@ -272,13 +278,21 @@ namespace SoftwareNinjas.NAnt.Tasks
             var result = HaveSameName(baseline, challenger);
             if (result)
             {
-                var baselineMembers = baseline.GetMembers();
-                var challengerMembers = challenger.GetMembers();
+                var baselineMembers = GetVisibleMembers(baseline);
+                var challengerMembers = GetVisibleMembers(challenger);
                 foreach (var memberInfo in Compare(baselineMembers, challengerMembers))
                 {
                     yield return memberInfo;
                 }
             }
+        }
+
+        internal static IEnumerable<MemberInfo> GetVisibleMembers(Type type)
+        {
+            var unfiltered = type.GetMembers(BindingFlags.Public | BindingFlags.NonPublic
+                                             | BindingFlags.Instance | BindingFlags.Static);
+            var result = unfiltered.Filter(IsVisible);
+            return result;
         }
 
         internal static IEnumerable<MemberInfo> Compare
@@ -391,6 +405,47 @@ namespace SoftwareNinjas.NAnt.Tasks
             {
                 challengerMemberDictionary.Remove(foundChallenger);
             }
+        }
+
+        internal static bool IsVisible(MemberInfo memberInfo)
+        {
+            if (memberInfo is MethodBase)
+            {
+                return IsVisible((MethodBase) memberInfo);
+            }
+            if (memberInfo is FieldInfo)
+            {
+                return IsVisible((FieldInfo) memberInfo);
+            }
+            if (memberInfo is EventInfo)
+            {
+                return true;
+            }
+            if (memberInfo is Type)
+            {
+                return IsVisible((Type) memberInfo);
+            }
+            if (memberInfo is PropertyInfo)
+            {
+                // we aren't processing them anyway; we instead focus on associated accessor methods
+                return false;
+            }
+            throw new ArgumentException("Parameter 'memberInfo' is an unsupported type.", "memberInfo");
+        }
+
+        internal static bool IsVisible(Type type)
+        {
+            return type.IsNested && (type.IsNestedPublic || type.IsNestedFamily);
+        }
+
+        internal static bool IsVisible(MethodBase methodBase)
+        {
+            return methodBase.IsPublic || methodBase.IsFamily;
+        }
+
+        internal static bool IsVisible(FieldInfo fieldInfo)
+        {
+            return fieldInfo.IsPublic || fieldInfo.IsFamily;
         }
     }
 }
