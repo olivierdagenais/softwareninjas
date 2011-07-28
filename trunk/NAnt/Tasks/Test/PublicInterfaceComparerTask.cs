@@ -85,7 +85,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility).ToList();
             // assert
-            Assert.AreEqual(118, actual.Count);
+            Assert.AreEqual(119, actual.Count);
         }
 
         /// <summary>
@@ -427,6 +427,20 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             var baselineConstructor = baseline.GetConstructor
                 (NonPublicInstance, null, Type.EmptyTypes, null);
             var actual = Parent.PublicInterfaceComparerTask.IsVisible(baselineConstructor);
+            Assert.AreEqual(true, actual);
+        }
+
+        /// <summary>
+        /// Test the <see cref="Parent.PublicInterfaceComparerTask.IsVisible(MethodBase)"/> method
+        /// with a method marked protected internal.
+        /// </summary>
+        [Test]
+        public void IsVisibleMethodBase_ProtectedInternal()
+        {
+            var visibility = _visibility.GetType("Textile.States.CodeFormatterState");
+            var visibilityFixEntities = visibility.GetMethod
+                ("FixEntities", NonPublicInstance, null, new[] {typeof (String)}, null);
+            var actual = Parent.PublicInterfaceComparerTask.IsVisible(visibilityFixEntities);
             Assert.AreEqual(true, actual);
         }
 
