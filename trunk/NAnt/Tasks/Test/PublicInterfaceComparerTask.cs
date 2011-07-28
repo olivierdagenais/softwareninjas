@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -84,10 +85,92 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         public void Compare_DifferentAssemblies()
         {
             // act
-            var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility).ToList();
+            var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility);
             // assert
-            Assert.AreEqual(103, actual.Count);
+            var described = actual.Map(mi => Parent.PublicInterfaceComparerTask.Describe(mi));
+            var listed = described.ToList();
+            var count = listed.Count;
+            Assert.AreEqual(103, count);
         }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Describe(MemberInfo)"/> method with
+        /// a method.
+        /// </summary>
+        [Test]
+        public void Describe_MethodInfo()
+        {
+            // arrange
+            var methodInfo = GetConvertToStringOverload(typeof(Int32));
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Describe((MemberInfo) methodInfo);
+            // assert
+            Assert.AreEqual("System.Convert System.String ToString(Int32)", actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Describe(MemberInfo)"/> method with
+        /// a type.
+        /// </summary>
+        [Test]
+        public void Describe_Type()
+        {
+            // arrange
+            var type = typeof (Convert);
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Describe((MemberInfo) type);
+            // assert
+            Assert.AreEqual("System.Convert", actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Describe(MemberInfo)"/> method with
+        /// a constructor.
+        /// </summary>
+        [Test]
+        public void Describe_Constructor()
+        {
+            // arrange
+            var stringType = typeof (String);
+            var constructorCharCount = stringType.GetConstructor(new[] {typeof (Char), typeof(Int32)});
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Describe((MemberInfo) constructorCharCount);
+            // assert
+            Assert.AreEqual("System.String Void .ctor(Char, Int32)", actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Describe(MemberInfo)"/> method with
+        /// a field.
+        /// </summary>
+        [Test]
+        public void Describe_Field()
+        {
+            // arrange
+            var stringType = typeof(String);
+            var field = stringType.GetField("Empty");
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Describe((MemberInfo) field);
+            // assert
+            Assert.AreEqual("System.String System.String Empty", actual);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.Describe(MemberInfo)"/> method with
+        /// an event.
+        /// </summary>
+        [Test]
+        public void Describe_Event()
+        {
+            // arrange
+            var processType = typeof(Process);
+            var disposedEvent = processType.GetEvent("Disposed");
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.Describe((MemberInfo) disposedEvent);
+            // assert
+            Assert.AreEqual("System.Diagnostics.Process System.EventHandler Disposed", actual);
+        }
+
 
         /// <summary>
         /// Tests the <see cref="Parent.PublicInterfaceComparerTask.AreEqual(MethodBase,MethodBase)"/> method with

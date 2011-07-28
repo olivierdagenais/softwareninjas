@@ -90,7 +90,7 @@ namespace SoftwareNinjas.NAnt.Tasks
             var count = 0;
             foreach (var memberInfo in results)
             {
-                Log(Level.Debug, "Difference: {0}{1}", memberInfo.ReflectedType.FullName,  memberInfo.ToString());
+                Log(Level.Debug, "Difference: {0}", Describe(memberInfo));
                 count++;
             }
             Project.Properties[Property] = count.ToString();
@@ -454,6 +454,47 @@ namespace SoftwareNinjas.NAnt.Tasks
         internal static bool IsVisible(FieldInfo fieldInfo)
         {
             return fieldInfo.IsPublic || fieldInfo.IsFamily || fieldInfo.IsFamilyOrAssembly;
+        }
+
+        internal static string Describe(MethodBase methodBase)
+        {
+            return "{0} {1}".FormatInvariant(Describe(methodBase.ReflectedType), methodBase.ToString());
+        }
+
+        internal static string Describe(Type type)
+        {
+            return type.FullName;
+        }
+
+        internal static string Describe(EventInfo eventInfo)
+        {
+            return "{0} {1}".FormatInvariant(Describe(eventInfo.ReflectedType), eventInfo.ToString());
+        }
+
+        internal static string Describe(FieldInfo fieldInfo)
+        {
+            return "{0} {1}".FormatInvariant(Describe(fieldInfo.ReflectedType), fieldInfo.ToString());
+        }
+
+        internal static string Describe(MemberInfo memberInfo)
+        {
+            if (memberInfo is MethodBase)
+            {
+                return Describe((MethodBase) memberInfo);
+            }
+            if (memberInfo is EventInfo)
+            {
+                return Describe((EventInfo) memberInfo);
+            }
+            if (memberInfo is FieldInfo)
+            {
+                return Describe((FieldInfo) memberInfo);
+            }
+            if (memberInfo is Type)
+            {
+                return Describe((Type) memberInfo);
+            }
+            throw new ArgumentException("Unsupported MemberInfo instance", "memberInfo");
         }
     }
 }
