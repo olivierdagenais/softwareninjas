@@ -28,6 +28,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         private const string TextileBlocksCapitalsBlockModifier = "Textile.Blocks.CapitalsBlockModifier";
         private const string TextileBlocksHyperLinkBlockModifier = "Textile.Blocks.HyperLinkBlockModifier";
         private const string TextileBlocksNoTextileBlockModifier = "Textile.Blocks.NoTextileBlockModifier";
+        private const string TextileFormatterState = "Textile.FormatterState";
 
         private static readonly MemberInfo[] EmptyMemberInfoSequence = new MemberInfo[] { };
 
@@ -85,7 +86,7 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
             // act
             var actual = Parent.PublicInterfaceComparerTask.Compare(_baseline, _visibility).ToList();
             // assert
-            Assert.AreEqual(119, actual.Count);
+            Assert.AreEqual(103, actual.Count);
         }
 
         /// <summary>
@@ -190,6 +191,29 @@ namespace SoftwareNinjas.NAnt.Tasks.Test
         {
             return type.GetMethod("PhraseModifierFormat", 
                 BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static);
+        }
+
+        /// <summary>
+        /// Tests the <see cref="Parent.PublicInterfaceComparerTask.AreEqual(MethodBase,MethodBase)"/> method with
+        /// two methods that have technically the same visibility (protected vs. protected internal).
+        /// </summary>
+        [Test]
+        public void AreEqual_MethodInfoInstancesWithProtectedInternalVisibility()
+        {
+            // arrange
+            var baseline = _baseline.GetType(TextileFormatterState);
+            var challenger = _visibility.GetType(TextileFormatterState);
+            var baselineGcfs = GetCurrentFormatterStateGetter(baseline);
+            var challengerGcfs = GetCurrentFormatterStateGetter(challenger);
+            // act
+            var actual = Parent.PublicInterfaceComparerTask.AreEqual(baselineGcfs, challengerGcfs);
+            // assert
+            Assert.AreEqual(true, actual);
+        }
+
+        private static MethodInfo GetCurrentFormatterStateGetter(Type type)
+        {
+            return type.GetMethod("get_CurrentFormatterState", NonPublicInstance);
         }
 
         /// <summary>
