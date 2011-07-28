@@ -435,17 +435,17 @@ namespace SoftwareNinjas.NAnt.Tasks
 
         internal static bool IsVisible(Type type)
         {
-            return type.IsNested && (type.IsNestedPublic || type.IsNestedFamily);
+            return type.IsNested && (type.IsNestedPublic || type.IsNestedFamily || type.IsNestedFamORAssem);
         }
 
         internal static bool IsVisible(MethodBase methodBase)
         {
-            return methodBase.IsPublic || methodBase.IsFamily;
+            return methodBase.IsPublic || methodBase.IsFamily || methodBase.IsFamilyOrAssembly;
         }
 
         internal static bool IsVisible(FieldInfo fieldInfo)
         {
-            return fieldInfo.IsPublic || fieldInfo.IsFamily;
+            return fieldInfo.IsPublic || fieldInfo.IsFamily || fieldInfo.IsFamilyOrAssembly;
         }
     }
 }
