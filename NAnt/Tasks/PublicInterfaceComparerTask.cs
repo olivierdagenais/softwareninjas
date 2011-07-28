@@ -124,10 +124,15 @@ namespace SoftwareNinjas.NAnt.Tasks
             }
         }
 
+        internal static IEnumerable<Type> GetVisibleTypes(Assembly assembly)
+        {
+            return assembly.GetTypes().Filter(t => t.IsVisible);
+        }
+
         internal static IEnumerable<MemberInfo> Compare(Assembly baseline, Assembly challenger)
         {
-            var baselineTypes = baseline.GetTypes();
-            var challengerTypeDictionary = CopyToDictionary((IEnumerable<Type>)challenger.GetTypes());
+            var baselineTypes = GetVisibleTypes(baseline);
+            var challengerTypeDictionary = CopyToDictionary((IEnumerable<Type>)GetVisibleTypes(challenger));
             foreach (var baselineType in baselineTypes)
             {
                 Type foundChallenger = null;
@@ -249,7 +254,28 @@ namespace SoftwareNinjas.NAnt.Tasks
 
         internal static bool HaveSameName(Type baseline, Type challenger)
         {
-            return baseline.FullName == challenger.FullName;
+            var result = baseline.Namespace == challenger.Namespace
+                         && baseline.Name == challenger.Name;
+            var baselineGenericArguments = baseline.GetGenericArguments();
+            var challengerGenericArguments = challenger.GetGenericArguments();
+            if (result)
+            {
+                result = baselineGenericArguments.Length == challengerGenericArguments.Length;
+            }
+            if (result)
+            {
+                for (var i = 0; i < baselineGenericArguments.Length; i++)
+                {
+                    var baselineGenericArgument = baselineGenericArguments[i];
+                    var challengerGenericArgument = challengerGenericArguments[i];
+                    if (!HaveSameName(baselineGenericArgument, challengerGenericArgument))
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+            return result;
         }
 
         internal static Dictionary<MemberInfo, MemberInfo> CopyToDictionary(IEnumerable<MemberInfo> memberInfos)
