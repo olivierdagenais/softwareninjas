@@ -206,10 +206,8 @@ namespace SoftwareNinjas.NAnt.Tasks
         {
             var result = baseline.Name == challenger.Name
                            && HaveSameName(baseline.DeclaringType, challenger.DeclaringType)
-                           && baseline.IsFamily == challenger.IsFamily
-                           && baseline.IsPrivate == challenger.IsPrivate
-                           && baseline.IsPublic == challenger.IsPublic
-                           && baseline.IsAssembly == challenger.IsAssembly
+                           && IsProtected(baseline) == IsProtected(challenger)
+                           && IsPublic(baseline) == IsPublic(challenger)
                            && baseline.IsStatic == challenger.IsStatic;
             var baseParameters = baseline.GetParameters();
             var challengerParameters = challenger.GetParameters();
@@ -440,7 +438,17 @@ namespace SoftwareNinjas.NAnt.Tasks
 
         internal static bool IsVisible(MethodBase methodBase)
         {
-            return methodBase.IsPublic || methodBase.IsFamily || methodBase.IsFamilyOrAssembly;
+            return IsProtected(methodBase) || IsPublic(methodBase);
+        }
+
+        internal static bool IsProtected(MethodBase methodBase)
+        {
+            return methodBase.IsFamily || methodBase.IsFamilyOrAssembly;
+        }
+
+        internal static bool IsPublic(MethodBase methodBase)
+        {
+            return methodBase.IsPublic;
         }
 
         internal static bool IsVisible(FieldInfo fieldInfo)
