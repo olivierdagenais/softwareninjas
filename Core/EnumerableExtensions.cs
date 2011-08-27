@@ -144,6 +144,66 @@ namespace SoftwareNinjas.Core
         }
 
         /// <summary>
+        /// Returns the first element of a sequence or throws an exception if the sequence contains no elements.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of the elements of <paramref name="source"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="source">
+        /// The <see cref="IEnumerable{T}"/> to return the first element of.
+        /// </param>
+        /// 
+        /// <returns>
+        /// The first element in <paramref name="source"/>.
+        /// </returns>
+        /// 
+        /// <exception cref="InvalidOperationException">
+        /// The <paramref name="source"/> sequence is empty.
+        /// </exception>
+        public static T First<T>(this IEnumerable<T> source)
+        {
+            return First(source, e => true);
+        }
+
+        /// <summary>
+        /// Returns the first element of a sequence or throws an exception if the sequence contains no elements.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of the elements of <paramref name="source"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="source">
+        /// The <see cref="IEnumerable{T}"/> to return the first element of.
+        /// </param>
+        /// 
+        /// <param name="predicate">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// 
+        /// <returns>
+        /// The first element in <paramref name="source"/> that passes the test in the specified
+        /// <paramref name="predicate"/> function.
+        /// </returns>
+        /// 
+        /// <exception cref="InvalidOperationException">
+        /// No element satisfies the condition in <paramref name="predicate"/>.
+        /// -or-
+        /// The <paramref name="source"/> sequence is empty.
+        /// </exception>
+        public static T First<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            var e = source.Filter(predicate).GetEnumerator();
+            if (e.MoveNext())
+            {
+                return e.Current;
+            }
+            throw new InvalidOperationException();
+        }
+
+        /// <summary>
         /// Returns the first element of a sequence, or a default value if the sequence contains no elements.
         /// </summary>
         /// 
@@ -161,7 +221,32 @@ namespace SoftwareNinjas.Core
         /// </returns>
         public static T FirstOrDefault<T>(this IEnumerable<T> source)
         {
-            var e = source.GetEnumerator();
+            return FirstOrDefault(source, e => true);
+        }
+
+        /// <summary>
+        /// Returns the first element of a sequence, or a default value if the sequence contains no elements.
+        /// </summary>
+        /// 
+        /// <typeparam name="T">
+        /// The type of the elements of <paramref name="source"/>.
+        /// </typeparam>
+        /// 
+        /// <param name="source">
+        /// The <see cref="IEnumerable{T}"/> to return the first element of.
+        /// </param>
+        /// 
+        /// <param name="predicate">
+        /// A function to test each element for a condition.
+        /// </param>
+        /// 
+        /// <returns>
+        /// <b>default</b>(<typeparamref name="T"/>) if <paramref name="source"/> is empty; otherwise, the first element
+        /// in <paramref name="source"/> that passes the test in the specified <paramref name="predicate"/> function.
+        /// </returns>
+        public static T FirstOrDefault<T>(this IEnumerable<T> source, Func<T, bool> predicate)
+        {
+            var e = source.Filter(predicate).GetEnumerator();
             if (e.MoveNext())
             {
                 return e.Current;
