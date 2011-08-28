@@ -45,6 +45,10 @@
     <Compile Include="Properties\CustomInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj">
+      <Project>{ECF90A5B-D97A-4E1D-B76C-CDC6ECE2AE03}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NAnt\NAnt.csproj">
       <Project>{13804795-4B3E-4B78-A137-060C820EFE26}</Project>
       <Name>NAnt</Name>
