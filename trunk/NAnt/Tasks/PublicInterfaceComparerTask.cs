@@ -13,7 +13,8 @@ namespace SoftwareNinjas.NAnt.Tasks
     /// </summary>
     /// <example>
     ///   <para>
-    ///   The example will count the <c>seqpnt</c> elements that have been visited at least once.
+    ///   The example will set the <c>numberOfDifferences</c> property to the result of comparing both versions of
+    ///   the <c>MyProject.dll</c> assembly.
     ///   </para>
     ///   <code>
     ///     <![CDATA[

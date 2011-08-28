@@ -65,6 +65,7 @@
     <Compile Include="Tasks\CleanTask.cs" />
     <Compile Include="Tasks\CustomizeAssemblyTask.cs" />
     <Compile Include="Tasks\FormField.cs" />
+    <Compile Include="Tasks\LineCountTask.cs" />
     <Compile Include="Tasks\PostTask.cs" />
     <Compile Include="Tasks\Project.cs" />
     <Compile Include="Tasks\ProjectLoader.cs" />
