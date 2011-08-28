@@ -63,9 +63,19 @@ namespace SoftwareNinjas.NAnt.Tasks
         /// <summary>
         /// The name of the property that receives number of public interface differences.
         /// </summary>
-        [TaskAttribute("property", Required = true)]
+        [TaskAttribute("property", Required = false)]
         [StringValidator(AllowEmpty = false)]
         public string Property
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The path to the report file to write.
+        /// </summary>
+        [TaskAttribute("report", Required = false)]
+        public FileInfo ReportFile
         {
             get;
             set;
@@ -76,7 +86,6 @@ namespace SoftwareNinjas.NAnt.Tasks
         /// </summary>
         protected override void ExecuteTask()
         {
-            // TODO: make Property optional and support an output file for an XML report
             var baselineFullPath = BaselineFile.FullName;
             Log(Level.Verbose, "Loading baseline assembly from {0}", baselineFullPath);
             var baseline = Assembly.LoadFile(baselineFullPath);
@@ -88,12 +97,20 @@ namespace SoftwareNinjas.NAnt.Tasks
             Log(Level.Info, "Comparing {0} to {1}", baselineFullPath, challengerFullPath);
             var results = Compare(baseline, challenger);
             var count = 0;
-            foreach (var memberInfo in results)
+            using (var report = ReportFile == null ? TextWriter.Null : new StreamWriter(ReportFile.FullName, false))
             {
-                Log(Level.Debug, "Difference: {0}", Describe(memberInfo));
-                count++;
+                foreach (var memberInfo in results)
+                {
+                    var description = Describe(memberInfo);
+                    Log(Level.Debug, "Difference: {0}", description);
+                    report.WriteLine(description);
+                    count++;
+                }
             }
-            Project.Properties[Property] = count.ToString();
+            if (Property != null)
+            {
+                Project.Properties[Property] = count.ToString();
+            }
         }
 
         internal static IEnumerable<MemberInfo> Compare(MemberInfo baselineMember, Dictionary<MemberInfo, MemberInfo> challengerMemberDictionary)
