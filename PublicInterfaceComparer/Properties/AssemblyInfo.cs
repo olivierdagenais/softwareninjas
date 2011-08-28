@@ -1,16 +1,15 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SoftwareNinjas.NAnt")]
-[assembly: AssemblyDescription("NAnt tasks by the Software Ninjas")]
+[assembly: AssemblyTitle("SoftwareNinjas.PublicInterfaceComparer")]
+[assembly: AssemblyDescription("Compares two assemblies for differences in their public members")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Software Ninjas")]
-[assembly: AssemblyProduct("Software Ninjas NAnt Tasks")]
-[assembly: AssemblyCopyright("(C) Copyright 2009-2011 Software Ninjas")]
+[assembly: AssemblyProduct("Software Ninjas Public Interface Comparer")]
+[assembly: AssemblyCopyright("(C) Copyright 2011 Software Ninjas")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,5 +19,4 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("620a6d8c-87c8-40d1-b890-5455a8b24561")]
-[assembly: InternalsVisibleTo("SoftwareNinjas.PublicInterfaceComparer")]
+[assembly: Guid("552fd2ff-2b00-48d0-aa8d-cdcb0b554774")]

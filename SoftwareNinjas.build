@@ -8,7 +8,7 @@
 
     <property name="configuration" value="Debug" overwrite="false" />
     <property name="TargetFrameworkVersion" value="v2.0" overwrite="false" />
-    <property name="projects" value="Core,MSBuild,NAnt" />
+    <property name="projects" value="Core,MSBuild,NAnt,PublicInterfaceComparer" />
 
     <target name="schema">
         <nantschema output="Tools/NAnt.xsd" target-ns="http://softwareninjas.googlecode.com/schemas/nant.xsd"/>
@@ -85,6 +85,7 @@
         <mkdir dir="${deployFolder}/${versionFolder}"/>
         <copy todir="${deployFolder}/${versionFolder}" flatten="true">
             <fileset>
+                <include name="*/bin/${configuration}/SoftwareNinjas.*.exe"/>
                 <include name="*/bin/${configuration}/SoftwareNinjas.*.dll"/>
                 <include name="*/bin/${configuration}/SoftwareNinjas.*.xml"/>
                 <include name="MSBuild/SoftwareNinjas.*.targets"/>
