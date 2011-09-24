@@ -69,7 +69,6 @@
     <Compile Include="Tasks\PostTask.cs" />
     <Compile Include="Tasks\Project.cs" />
     <Compile Include="Tasks\ProjectLoader.cs" />
-    <Compile Include="Tasks\PublicInterfaceComparerTask.cs" />
     <Compile Include="Tasks\SupportedLanguage.cs" />
     <Compile Include="Tasks\TestableTask.cs" />
     <Compile Include="Tasks\TestTask.cs" />
@@ -78,7 +77,6 @@
     <Compile Include="Tasks\Test\CustomizeAssemblyTask.cs" />
     <Compile Include="Tasks\Test\PostTask.cs" />
     <Compile Include="Tasks\Test\ProjectLoader.cs" />
-    <Compile Include="Tasks\Test\PublicInterfaceComparerTask.cs" />
     <Compile Include="Tasks\Test\TestTask.cs" />
     <Compile Include="Tasks\Test\XpathTask.cs" />
     <Compile Include="Tasks\XpathTask.cs" />
@@ -91,17 +89,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Tasks\CustomInfo_cs.xsl" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Tasks\Test\Textile-base.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Tasks\Test\Textile-manual.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Tasks\Test\Textile-visibility.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

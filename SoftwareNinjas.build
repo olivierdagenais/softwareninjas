@@ -8,7 +8,7 @@
 
     <property name="configuration" value="Debug" overwrite="false" />
     <property name="TargetFrameworkVersion" value="v2.0" overwrite="false" />
-    <property name="projects" value="Core,MSBuild,NAnt,PublicInterfaceComparer" />
+    <property name="projects" value="Core,MSBuild,NAnt" />
 
     <target name="schema">
         <nantschema output="Tools/NAnt.xsd" target-ns="http://softwareninjas.googlecode.com/schemas/nant.xsd"/>
