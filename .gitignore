@@ -1,0 +1,6 @@
+*.ReSharper.user
+*.suo
+*/bin/*/**
+*/obj/*/**
+*.sln.cache
+Deploy-*/**
