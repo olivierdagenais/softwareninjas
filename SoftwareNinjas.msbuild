@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project
+    ToolsVersion="12.0"
+    DefaultTargets="deploy"
+    xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <Configuration>Debug</Configuration>
+        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Projects Include="Core" />
+        <Projects Include="MSBuild" />
+        <Projects Include="NAnt" />
+    </ItemGroup>
+
+    <Target Name="clean">
+        <MSBuild Projects="@(Projects->'%(Identity)/%(Identity).csproj')" Targets="Clean" />
+    </Target>
+
+    <Target Name="customize" DependsOnTargets="clean" Condition=" $(BUILD_NUMBER) != '' ">
+        <Delete Files="@(Projects->'%(Identity)/Properties/CustomInfo.cs')" />
+        <PropertyGroup>
+            <Parameters>
+                <Parameter Name="buildNumber" Value="$(BUILD_NUMBER)" />
+            </Parameters>
+        </PropertyGroup>
+        <XslTransformation
+            XmlInputPaths="Version.xml"
+            XslInputPaths="NAnt/Tasks/CustomInfo_cs.xsl"
+            OutputPaths="@(Projects->'%(Identity)/Properties/CustomInfo.cs')"
+            Parameters="$(Parameters)"
+        />
+    </Target>
+
+    <Target Name="compile" DependsOnTargets="customize">
+        <MSBuild
+            Projects="SoftwareNinjas.sln"
+            BuildInParallel="true"
+            Properties="Configuration=$(Configuration);TargetFrameworkVersion=$(TargetFrameworkVersion)"
+        />
+    </Target>
+
+    <Target Name="test" DependsOnTargets="compile">
+        <PropertyGroup>
+            <NUnitVersion>2.6.3</NUnitVersion>
+        </PropertyGroup>
+        <Exec Command=".nuget\NuGet.exe install -OutputDirectory packages NUnit.Runners -Version $(NUnitVersion) -NonInteractive" />
+        <Exec Command="packages\NUnit.Runners.$(NUnitVersion)\tools\nunit-console.exe /nologo /noresult /framework=$(TargetFrameworkVersion) %(Projects.Identity)/bin/$(Configuration)/SoftwareNinjas.%(Projects.Identity).dll" />
+    </Target>
+
+    <Target Name="documentation" DependsOnTargets="test">
+        <!-- TODO: implement -->
+    </Target>
+
+    <Target Name="deploy" DependsOnTargets="documentation">
+        <XmlPeek XmlInputPath="Version.xml" Query="/version/@major">
+            <Output TaskParameter="Result" ItemName="major"/>
+        </XmlPeek>
+        <XmlPeek XmlInputPath="Version.xml" Query="/version/@minor">
+            <Output TaskParameter="Result" ItemName="minor"/>
+        </XmlPeek>
+        <PropertyGroup>
+            <buildNumber Condition=" '$(BUILD_NUMBER)' != '' ">$(BUILD_NUMBER)</buildNumber>
+            <buildNumber Condition=" '$(buildNumber)' == '' ">private</buildNumber>
+            <versionFolder>SoftwareNinjas-@(major).@(minor).$(buildNumber)</versionFolder>
+            <deployFolder>Deploy-$(TargetFrameworkVersion)</deployFolder>
+        </PropertyGroup>
+        
+        <RemoveDir Directories="$(deployFolder)" ContinueOnError="WarnAndContinue" />
+        <MakeDir Directories="$(deployFolder)" />
+        <ItemGroup>
+            <toDeploy Include="*/bin/$(configuration)/SoftwareNinjas.*.exe"/>
+            <toDeploy Include="*/bin/$(configuration)/SoftwareNinjas.*.dll"/>
+            <toDeploy Include="*/bin/$(configuration)/SoftwareNinjas.*.xml"/>
+            <toDeploy Include="MSBuild/SoftwareNinjas.*.targets"/>
+        </ItemGroup>
+        <Copy DestinationFolder="$(deployFolder)/$(versionFolder)" SourceFiles="@(toDeploy)" />
+        <!--
+        <copy todir="${deployFolder}/${versionFolder}/doc">
+            <fileset basedir="Documentation">
+                <include name="**"/>
+            </fileset>
+        </copy>
+
+        <zip zipfile="${deployFolder}/${versionFolder}.zip">
+            <fileset basedir="${deployFolder}">
+                <include name="${versionFolder}/**"/>
+            </fileset>
+        </zip>
+        -->
+    </Target>
+
+    <Target Name="release">
+        <PropertyGroup>
+            <Configuration>Release</Configuration>
+        </PropertyGroup>
+        <CallTarget Targets="deploy" />
+    </Target>
+    
+</Project>
