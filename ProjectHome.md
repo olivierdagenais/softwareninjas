@@ -1,0 +1,1 @@
+While programming, it often happens that a really neat and re-usable piece of code is written.  It would be a mistake to leave it in the original project if it's easily made generic and re-usable, especially if you later find yourself needing to use that code and the only option is to copy-paste it because the two code bases are totally separate.
